@@ -4,7 +4,7 @@ import random
 pygame.init()
 IsRunning = True #Een boolean voor de while loop
 
-win = pygame.display.set_mode((1220, 800))
+win = pygame.display.set_mode((1220, 750))
 
 pygame.display.set_caption("Arda en Nieks reetro Arkade")
 

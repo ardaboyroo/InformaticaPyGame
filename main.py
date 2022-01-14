@@ -3,7 +3,7 @@ import math
 import random
 pygame.init()
 IsRunning = True #Een boolean voor de while loop
-win = pygame.display.set_mode((1220, 750)) #Breedte en Hoogte van het scherm in aantal pixels
+win = pygame.display.set_mode((1200, 700)) #Breedte en Hoogte van het scherm in aantal pixels
 
 pygame.display.set_caption("Arda en Nieks reetro Arkade")
 

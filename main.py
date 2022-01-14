@@ -3,7 +3,7 @@ import math
 import random
 pygame.init()
 IsRunning = True #Een boolean voor de while loop
-
+print("cum")
 win = pygame.display.set_mode((1220, 750))
 
 pygame.display.set_caption("Arda en Nieks reetro Arkade")

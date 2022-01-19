@@ -3,15 +3,15 @@ import math
 import random
 pygame.init()
 
-ScreenWidth = 1200 #De breedte van het scherm in pixels
-ScreenHeight = 700 #De hoogte van het scherm in pixels
+ScreenWidth = 1200   #De breedte van het scherm in pixels
+ScreenHeight = 700   #De hoogte van het scherm in pixels
 
 """ #Dit zijn ongebruikte code, het wordt gebruikt als Refference
 TextCenter = TitleTxt.get_rect(center=(ScreenWidth/2, ScreenHeight/16))
 """
 
 IsRunning = True  # Een boolean voor de while loop
-win = pygame.display.set_mode((ScreenWidth, ScreenHeight))  # Breedte en Hoogte van het scherm in aantal pixels
+win = pygame.display.set_mode((ScreenWidth, ScreenHeight))  #Breedte en Hoogte van het scherm in aantal pixels
 pygame.display.set_caption("Arda en Nieks reetro Arkade")
 
 #De volgende Variables zijn de kleuren van de gekozen ColourScheme
@@ -24,19 +24,22 @@ Pink = (250,172,215)
 White = (255,255,255)
 
 #De volgende Variables zijn de Main Data
-MenuStart = False
+Menu = True
 MainFont = pygame.font.Font("freesansbold.ttf", 32)
-TitleTxt = MainFont.render("Wilkom bij Arda en Nieks Reetro Arkade",True,Pink,DarkPurple)
+TitleTxt = MainFont.render("Wilkom bij Arda en Niek's Reetro Arkade",True,Pink,DarkPurple)
 
 
 while IsRunning:
-    pygame.time.delay(33)  # Framerate in 1/milliseconden
+    pygame.time.delay(33)   #Framerate in 1/milliseconden
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             IsRunning = False
-    if not MenuStart:
+    if Menu:
         win.fill(MainPurple)
         win.blit(TitleTxt,TitleTxt.get_rect(center=(ScreenWidth/2,ScreenHeight/16)))
-
+    
+    if Menu:
+        for x in range(1,85):   #Deze for-loop zorgt voor een "Retro Scan Lines" effect
+            pygame.draw.rect(win,Black,(0,(x*9-4),ScreenWidth,2))
     pygame.display.update()
 pygame.quit()

@@ -1,13 +1,17 @@
 import pygame
 import math
 import random
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 700
-
 pygame.init()
+
+ScreenWidth = 1200 #De breedte van het scherm in pixels
+ScreenHeight = 700 #De hoogte van het scherm in pixels
+
+""" #Dit zijn ongebruikte code, het wordt gebruikt als Refference
+TextCenter = TitleTxt.get_rect(center=(ScreenWidth/2, ScreenHeight/16))
+"""
+
 IsRunning = True  # Een boolean voor de while loop
-win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # Breedte en Hoogte van het scherm in aantal pixels
+win = pygame.display.set_mode((ScreenWidth, ScreenHeight))  # Breedte en Hoogte van het scherm in aantal pixels
 pygame.display.set_caption("Arda en Nieks reetro Arkade")
 
 #De volgende Variables zijn de kleuren van de gekozen ColourScheme
@@ -21,9 +25,9 @@ White = (255,255,255)
 
 #De volgende Variables zijn de Main Data
 MenuStart = False
-MainFont = pygame.font.Font('freesansbold.ttf', 32)
-TitleTxt = MainFont.render("Reetro Arkade pp",True,Pink,DarkPurple)
-text_rect = TitleTxt.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2-300))
+MainFont = pygame.font.Font("freesansbold.ttf", 32)
+TitleTxt = MainFont.render("Wilkom bij Arda en Nieks Reetro Arkade",True,Pink,DarkPurple)
+
 
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
@@ -32,7 +36,7 @@ while IsRunning:
             IsRunning = False
     if not MenuStart:
         win.fill(MainPurple)
-        win.blit(TitleTxt,text_rect)
+        win.blit(TitleTxt,TitleTxt.get_rect(center=(ScreenWidth/2,ScreenHeight/16)))
 
     pygame.display.update()
 pygame.quit()

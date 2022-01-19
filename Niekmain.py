@@ -71,8 +71,6 @@ run = True
 
 while run:
 
-
-
    if menuestart== False:
       win.fill((90, 210, 10))
       win.blit(Stext, (225,200))
@@ -118,7 +116,6 @@ while run:
           qx = pygame.mouse.get_pos()[0]
           print(qx)
           if qy >= 200 and qy <= 232 and qx >= 255 and qx <=576:
-
               menuestart = True
           if qy >= 400 and qy <= 432 and qx >= 100 and qx <=219:
               if randomlength == False:
@@ -366,11 +363,4 @@ while run:
                    balgaatnaarboven = False
                    balgaatnaarrechts = False
    pygame.display.update()
-
 pygame.quit()
-
-
-
-
-
-

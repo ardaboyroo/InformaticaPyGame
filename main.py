@@ -4,9 +4,8 @@ import random
 
 pygame.init()
 pygame.mixer.init()
-sound = pygame.mixer.Sound("roblox-death-sound_1.mp3")
+oofSound = pygame.mixer.Sound("roblox-death-sound_1.mp3")
 hitSound = pygame.mixer.Sound("hitmarker_2.mp3")
-clock = pygame.time.Clock()
 
 ScreenWidth = 1200  # De breedte van het scherm in pixels
 ScreenHeight = 700  # De hoogte van het scherm in pixels
@@ -30,6 +29,7 @@ White = (255, 255, 255)
 
 # De volgende Variables zijn de Main Data
 Menu = True
+
 BigFont = pygame.font.Font("freesansbold.ttf", 32)
 MediumFont = pygame.font.Font("freesansbold.ttf", 24)
 SmallFont = pygame.font.Font("freesansbold.ttf", 16)
@@ -43,17 +43,36 @@ Game1 = False
 
 Deb = False
 Debounce = 0
+
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
+    Key = pygame.key.get_pressed()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             IsRunning = False
-    print(Deb,Debounce)
-    if Deb == True:
+
+    if Deb:     # Debounce
         Debounce += 1
-    ScorePoneTxt = SmallFont.render("Hamudt: "+str(ScorePone),True,White)
-    ScorePtwoTxt = SmallFont.render("Eduardo: "+str(ScorePtwo),True,White)
-    win.fill(Black)
+
+    ScorePoneTxt = SmallFont.render("Hamudt: "+str(ScorePone),True,White)   # Update de score van Hamudt
+    ScorePtwoTxt = SmallFont.render("Eduardo: "+str(ScorePtwo),True,White)  # Update de score van Eduardo
+
+    win.fill(Black)     # Als er niks actief is is de achtergrond zwart
+
+    if Key[pygame.K_ESCAPE]:
+        Menu = True
+        Game1 = False
+    if Key[pygame.K_r]:
+        if Menu:
+            if not Deb:
+                ScorePone = 0
+                ScorePtwo = 0
+                Deb = True
+            elif Deb and Debounce >= 60:
+                Debounce = 0
+                Deb = False
+
     if Menu:
         win.fill(MainPurple)
         for x in range(1, 85):  # Deze for-loop zorgt voor een "Retro Scan Lines" effect
@@ -63,24 +82,25 @@ while IsRunning:
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1 , ScreenHeight / 16)))
         win.blit(TitleTxt, TitleTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
 
-        lol = pygame.draw.rect(win, Black, (100,150,100,50))
+        Game1Icon = pygame.draw.rect(win, Black, (100,150,100,50))
 
         if pygame.mouse.get_pressed()[0]:
             MouseX = pygame.mouse.get_pos()[0]
             MouseY = pygame.mouse.get_pos()[1]
 
-            if Deb == False:
+            if not Deb:
                 hitSound.play()
                 Deb = True
-            elif Deb and Debounce >= 33:
+            elif Deb and Debounce >= 4:
                 Debounce = 0
                 Deb = False
 
-            if MouseX >= 100 and MouseX <= 200 and MouseY >= 150 and MouseY <= 200:
+            if 100 <= MouseX <= 200 and 150 <= MouseY <= 200:
                 Menu = False
                 Game1 = True
-            print(MouseX,MouseY)
 
+    if Game1:
+        print()
 
     pygame.display.update()
 pygame.quit()

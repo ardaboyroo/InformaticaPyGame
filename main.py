@@ -4,7 +4,7 @@ pygame.init()
 pygame.mixer.init()
 oofSound = pygame.mixer.Sound("roblox-death-sound_1.mp3")
 hitSound = pygame.mixer.Sound("hitmarker_2.mp3")
-hitSoundDeb = False
+hitSound.set_volume(0.1)
 
 ScreenWidth = 1200  # De breedte van het scherm in pixels
 ScreenHeight = 700  # De hoogte van het scherm in pixels
@@ -50,11 +50,8 @@ while IsRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:   # if statement om de game af te sluiten met de rode kruis
             IsRunning = False
-        if event.type == pygame.MOUSEBUTTONDOWN and not hitSoundDeb:    # if statement for de hit sound
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # if statement for de hit sound
             hitSound.play()
-            hitSoundDeb = True
-        if event.type == pygame.MOUSEBUTTONUP:
-            hitSoundDeb = False
 
     ScorePoneTxt = SmallFont.render("Hamudt: "+str(ScorePone), True, White)   # Update de score van Hamudt
     ScorePtwoTxt = SmallFont.render("Eduardo: "+str(ScorePtwo), True, White)  # Update de score van Eduardo

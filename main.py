@@ -31,7 +31,6 @@ Menu = True
 BigFont = pygame.font.Font("freesansbold.ttf", 32)
 MediumFont = pygame.font.Font("freesansbold.ttf", 24)
 SmallFont = pygame.font.Font("freesansbold.ttf", 16)
-
 TitleTxt = BigFont.render("Wilkom bij Arda en Niek's Reetro(met een C) Arkade", True, Pink, DarkPurple)
 ScorePone = 0
 ScorePtwo = 0
@@ -53,10 +52,15 @@ while IsRunning:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # if statement for de hit sound
             hitSound.play()
 
+    def loading():
+        for y in range(1, 5):
+            pygame.draw.rect(win, Black, (0, 0, ScreenWidth, ScreenHeight*(y/4)))
+            pygame.display.update()
+            pygame.time.wait(125)
+
+
     ScorePoneTxt = SmallFont.render("Hamudt: "+str(ScorePone), True, White)   # Update de score van Hamudt
     ScorePtwoTxt = SmallFont.render("Eduardo: "+str(ScorePtwo), True, White)  # Update de score van Eduardo
-
-    win.fill(Black)     # Als er niks actief is is de achtergrond zwart
 
     Key = pygame.key.get_pressed()
     if Key[pygame.K_ESCAPE]:
@@ -67,11 +71,11 @@ while IsRunning:
         Game4 = False
         Game5 = False
         Game6 = False
+
     if Key[pygame.K_y]:
         if Menu:
-            if ScorePone > 0 or ScorePtwo > 0:
-                ScorePone = 0
-                ScorePtwo = 0
+            ScorePone = 0
+            ScorePtwo = 0
 
     if Menu:
         win.fill(MainPurple)
@@ -90,10 +94,11 @@ while IsRunning:
 
             if 100 <= MouseX <= 200 and 150 <= MouseY <= 200:
                 Menu = False
+                loading()
                 Game1 = True
 
     if Game1:
-        win.fill(Blue)
+        win.fill(White)
 
     pygame.display.update()
 pygame.quit()

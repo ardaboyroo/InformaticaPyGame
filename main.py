@@ -9,10 +9,6 @@ hitSound.set_volume(0.1)
 ScreenWidth = 1200  # De breedte van het scherm in pixels
 ScreenHeight = 700  # De hoogte van het scherm in pixels
 
-""" #Dit zijn ongebruikte code, het wordt gebruikt als Refference
-TextCenter = TitleTxt.get_rect(center=(ScreenWidth/2, ScreenHeight/16))
-"""
-
 IsRunning = True  # Een boolean voor de while loop
 win = pygame.display.set_mode((ScreenWidth, ScreenHeight))  # Breedte en Hoogte van het scherm in aantal pixels
 pygame.display.set_caption("Arda en Nieks reetro Arkade")   # De caption van de window
@@ -34,6 +30,9 @@ SmallFont = pygame.font.Font("freesansbold.ttf", 16)
 TitleTxt = BigFont.render("Wilkom bij Arda en Niek's Reetro(met een C) Arkade", True, Pink, DarkPurple)
 ScorePone = 0
 ScorePtwo = 0
+Loadingend = False
+LoadingTime = 32
+LoadingStep = 32
 
 # De volgende Variables zijn de bool values voor de games
 Game1 = False
@@ -52,12 +51,15 @@ while IsRunning:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # if statement for de hit sound
             hitSound.play()
 
-    def loading():
-        for y in range(1, 5):
-            pygame.draw.rect(win, Black, (0, 0, ScreenWidth, ScreenHeight*(y/4)))
+    def loading(val):
+        for y in range(1, LoadingTime):
+            pygame.draw.rect(win, Black, (0, 0, ScreenWidth, ScreenHeight*(y/LoadingStep)))
             pygame.display.update()
-            pygame.time.wait(125)
-
+            pygame.time.wait(33)
+        pygame.time.wait(500)
+        pygame.display.update()
+        val = True
+        return val
 
     ScorePoneTxt = SmallFont.render("Hamudt: "+str(ScorePone), True, White)   # Update de score van Hamudt
     ScorePtwoTxt = SmallFont.render("Eduardo: "+str(ScorePtwo), True, White)  # Update de score van Eduardo
@@ -71,6 +73,8 @@ while IsRunning:
         Game4 = False
         Game5 = False
         Game6 = False
+        LoadingTime = 32
+        Loadingend = loading(Loadingend)
 
     if Key[pygame.K_y]:
         if Menu:
@@ -94,11 +98,19 @@ while IsRunning:
 
             if 100 <= MouseX <= 200 and 150 <= MouseY <= 200:
                 Menu = False
-                loading()
                 Game1 = True
+                LoadingTime = 32
+                Loadingend = loading(Loadingend)
 
     if Game1:
         win.fill(White)
 
+    if Loadingend:
+        if not LoadingTime == 0:
+            pygame.draw.rect(win, Black, (0, 0, ScreenWidth, ScreenHeight*(LoadingTime/LoadingStep)))
+            pygame.display.update()
+            LoadingTime -= 1
+            if LoadingTime == 0:
+                Loadingend = False
     pygame.display.update()
 pygame.quit()

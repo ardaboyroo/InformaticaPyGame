@@ -1,4 +1,6 @@
 import pygame
+import random
+
 
 pygame.init()
 pygame.mixer.init()
@@ -15,6 +17,7 @@ pygame.display.set_caption("Arda en Nieks reetro Arkade")   # De caption van de 
 
 # De volgende Variables zijn de kleuren van de gekozen ColourScheme
 Black = (0, 0, 0)
+Gray = (25, 25, 25)
 DarkPurple = (55, 25, 103)
 MainPurple = (110, 50, 205)
 LightPurple = (154, 153, 235)
@@ -53,11 +56,12 @@ while IsRunning:
 
     def loading(val):
         for y in range(1, LoadingTime):
-            pygame.draw.rect(win, Black, (0, 0, ScreenWidth, ScreenHeight*(y/LoadingStep)))
+            pygame.draw.rect(win,Black, (0, 0, ScreenWidth, ScreenHeight*(y/LoadingStep)))
             pygame.display.update()
             pygame.time.wait(33)
-        pygame.time.wait(500)
+        pygame.draw.rect(win,Black, (0, 0, ScreenWidth,ScreenHeight))
         pygame.display.update()
+        pygame.time.wait(250)
         val = True
         return val
 
@@ -83,7 +87,7 @@ while IsRunning:
 
     if Menu:
         win.fill(MainPurple)
-        for x in range(1, 85):  # Deze for-loop zorgt voor een "Retro Scan Lines" effect
+        for x in range(1, 100):  # Deze for-loop zorgt voor een "Retro Scan Lines" effect
             pygame.draw.rect(win, Black, (0, (x * 9 - 4), ScreenWidth, 2))
 
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
@@ -103,7 +107,7 @@ while IsRunning:
                 Loadingend = loading(Loadingend)
 
     if Game1:
-        win.fill(White)
+        win.fill(Gray)
 
     if Loadingend:
         if not LoadingTime == 0:
@@ -112,5 +116,6 @@ while IsRunning:
             LoadingTime -= 1
             if LoadingTime == 0:
                 Loadingend = False
+
     pygame.display.update()
 pygame.quit()

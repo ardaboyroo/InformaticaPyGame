@@ -1,0 +1,146 @@
+import pygame
+import random
+pygame.init()
+win = pygame.display.set_mode((1200, 700))
+pygame.display.set_caption("henki")
+run = True
+flowdirection = -40
+flowdirection1 = 40
+flownum = 0
+flownum1 = 0
+def flowrandom():
+    flownum = random.randint(1,2)
+    global flowdirection
+    if flownum == 1:
+        flowdirection = -40
+    else:
+        flowdirection = 40
+def flowrandom1():
+    flownum1 = random.randint(1,2)
+    global flowdirection1
+    if flownum1 == 1:
+        flowdirection1 = -40
+    else:
+        flowdirection1 = 40
+
+
+class bullet:
+    def __init__(self,yspeed, Xbullet, Ybullet):
+        self.image = pygame.Surface((4, 50))
+        self.image.fill((255, 0, 255))
+        self.rect = self.image.get_rect()
+        self.rect.x = Xbullet
+        self.rect.y = Ybullet
+    def move(self, yspeed):
+        self.rect.y -= yspeed
+
+
+class Player:
+    def __init__(self, Playerx, Playery):
+        self.image = pygame.Surface((75, 75))
+        self.image.fill((225,225,225))
+        self.rect = self.image.get_rect()
+        self.rect.x = Playerx
+        self.rect.y = Playery
+
+
+    def move(self, Movex, Movey):
+        self.rect.x += Movex
+        self.rect.y += Movey
+
+class Chaser:
+    def __init__(self, Chaserx, Chasery):
+        self.image = pygame.Surface((75, 75))
+        self.image.fill((0,0,0))
+        self.rect = self.image.get_rect()
+        self.rect.x = Chaserx
+        self.rect.y = Chasery
+
+    def move(self, Chaserspeed):
+        self.rect.x += Chaserspeed
+
+class River:
+    def __init__(self, Riverx, Rivery):
+        self.image = pygame.Surface((1500, 125))
+        self.image.fill((0, 50, 255))
+        self.rect = self.image.get_rect()
+        self.rect.x = Riverx
+        self.rect.y = Rivery
+    def down(self, fallspeed):
+        self.rect.y += fallspeed
+
+
+singleflow = 0
+Flowright = False
+henk = Player(200, 200)
+piet = Chaser(100 ,600)
+river1 = River(0, 300)
+river2 = River(0, -200)
+bullet = bullet
+Buletis = False
+bulletexists = False
+while run:
+    win.fill((59,186,24))
+    pygame.time.delay(33)
+    pygame.draw.rect(win, (0, 50, 255), (0, 0, 100, 700))
+    pygame.draw.rect(win, (0, 50, 255), (1105, 0, 100, 700))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+    press = pygame.key.get_pressed()
+    if press[pygame.K_s]:
+        henk.move(0,15)
+    if press[pygame.K_d]:
+        henk.move(15,0)
+    if press[pygame.K_w]:
+        henk.move(0,-15)
+    if press[pygame.K_a]:
+        henk.move(-15,0)
+
+    if press[pygame.K_LEFT] and piet.rect.x > 100:
+        piet.move(-10)
+    if press[pygame.K_RIGHT] and piet.rect.x <= 1020:
+        piet.move(10)
+    if press[pygame.K_SPACE]:
+        if Buletis:
+            if Bullet.rect.y < 0:
+                Bullet.rect.x = piet.rect.x + 33
+                Bullet.rect.y = piet.rect.y + 10
+        if not Buletis:
+            Bullet = bullet(2, piet.rect.x + 50, piet.rect.y + 25)
+            Buletis = True
+    if Buletis:
+        Bullet.move(50)
+
+    #rivermovemet and directions
+    if river1.rect.y < 700:
+        river1.down(5)
+        if henk.rect.colliderect(river1.rect):
+            henk.move(flowdirection1,0)
+        if river1.rect.y == 695:
+           river1.down(-1000)
+    if river1.rect.y <= -125:
+        flowrandom1()
+    if river2.rect.y < 700:
+        river2.down(5)
+        if henk.rect.colliderect(river2.rect):
+            henk.move(flowdirection,0)
+        if river2.rect.y == 695:
+            river2.down(-1000)
+    if river2.rect.y <= -125:
+        flowrandom()
+
+
+
+
+   # drawing time
+    win.blit(river1.image, river1.rect)
+    win.blit(river2.image, river2.rect)
+    if Buletis:
+        win.blit(Bullet.image, Bullet.rect)
+    win.blit(piet.image, piet.rect)
+    win.blit(henk.image, henk.rect)
+
+    pygame.display.update()
+
+pygame.quit()

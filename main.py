@@ -235,7 +235,12 @@ while IsRunning:
                 CountDownAmount -= 1
                 pygame.display.update()
                 pygame.time.delay(500)
-            else:
+                PoneSimonList = []  # Reset de list van PlayerOneSimon
+                PtwoSimonList = []  # Reset de list van PlayerTwoSimon
+                PoneList = []  # Reset de list van PlayerOne
+                PtwoList = []  # Reset de list van PlayerTwo
+
+            else:       # Als het spel is begonnen gaat de volgende code runnen
                 if SimonTurn:
                     if len(PoneList) == len(PoneSimonList):
                         randomInt = random.randint(0, 3)
@@ -296,9 +301,13 @@ while IsRunning:
                     else:
                         PoneYellowColour = YellowPlaceHolder
 
-                    if len(PoneList) == len(PoneSimonList):
+                    if len(PoneList) == len(PoneSimonList) and PoneList == PoneSimonList:
                         SimonTurn = True
-        else:
+                    elif not PoneList == PoneSimonList and not SimonTurn and len():       # Als de combinatie van de player niet klopt zal er een end screen displayen
+                        GameStarted = False
+                        print("eeee")
+                        
+        else:       # De Values worden ge-reset nadat het spel is afgesloten
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne

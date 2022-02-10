@@ -4,7 +4,7 @@ import math
 
 pygame.init()
 pygame.mixer.init()
-oofSound = pygame.mixer.Sound("roblox-death-sound_1.mp3")
+# oofSound = pygame.mixer.Sound("roblox-death-sound_1.mp3")
 hitSound = pygame.mixer.Sound("hitmarker_2.mp3")
 hitSound.set_volume(0.1)
 
@@ -76,6 +76,7 @@ CountDownAmount = 3
 SimonTurn = True
 SimonTimer = 0
 Check = False
+Lose = False
 
 BluePlaceHolder = (21, 47, 89)
 GreenPlaceHolder = (35, 79, 0)
@@ -94,8 +95,8 @@ PoneYellowColour = YellowPlaceHolder
 
 
 # De volgende Variables zijn voor Game2
-SumoH = pygame.image.load("SumoH.png")
-SumoE = pygame.image.load("SumoE.png")
+# SumoH = pygame.image.load("SumoH.png")
+# SumoE = pygame.image.load("SumoE.png")
 
 
 while IsRunning:
@@ -114,7 +115,7 @@ while IsRunning:
         if Game1:
             if event.type == pygame.KEYUP:
                 if not SimonTurn:
-                    if not len(PoneList) >= len(PoneSimonList):
+                    if not len(PoneList) >= len(PoneSimonList):     # Als de PoneList niet gelijk is a
                         if event.key == pygame.K_w:
                             PoneList.append(ColourList[0])
                             Check = True
@@ -215,6 +216,13 @@ while IsRunning:
         pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
         pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
 
+        def PoneColourUpdate():
+            print("oi")
+            pygame.draw.rect(win, PoneBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+            pygame.draw.rect(win, PoneRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+            pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+            pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+            pygame.display.update()
         def ColourUpdate():
             pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
             pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
@@ -227,20 +235,14 @@ while IsRunning:
                 if len(PoneList) == len(PoneSimonList):
                     if PoneList == PoneSimonList:
                         SimonTurn = True
-                    # else:
-                        # player one loses
-
-                if len(PoneList) == 1:
-                    print("X van Pone ", x, " value: ", PoneSimonList[0])
-                elif not SimonTurn:
-                    pygame.draw.rect(win, White, (ScreenWidth/2, ScreenHeight/2, 100, 50))
-                elif len(PoneList) != 1:
-                    print("X van Pone ", x, " value: ", PoneSimonList[x])
-                else:
-                    pygame.draw.rect(win, White, (ScreenWidth/2, ScreenHeight/2, 100, 50))
+                for i in range(len(PoneList)):
+                    if not PoneList[i] == PoneSimonList[i]:
+                        GameStarted = False
+                        Lose = True
+                        print("Game ended")
             Check = False
 
-        if GameStarted:
+        if GameStarted and not Lose:
             # print(PoneList, PoneSimonList)
             if CountDown:
                 if CountDownAmount == 1:
@@ -272,6 +274,9 @@ while IsRunning:
                         PoneGreenColour = GreenPlaceHolder
                         PoneRedColour = RedPlaceHolder
                         PoneYellowColour = YellowPlaceHolder
+                        PoneColourUpdate()
+
+                        print(PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour)
 
                         for x in PoneSimonList:
                             if x == "Blue":
@@ -328,7 +333,13 @@ while IsRunning:
                     #     GameStarted = False
                     #     print("eeee")
 
-        else:       # De Values worden ge-reset nadat het spel is afgesloten
+        elif not GameStarted and Lose:
+            PoneSimonList = []      # Reset de list van PlayerOneSimon
+            PtwoSimonList = []      # Reset de list van PlayerTwoSimon
+            PoneList = []           # Reset de list van PlayerOne
+            PtwoList = []           # Reset de list van PlayerTwo
+
+        elif not GameStarted:       # De Values worden ge-reset nadat het spel is afgesloten
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne

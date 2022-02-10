@@ -25,12 +25,12 @@ Gray = (35, 35, 35)
 DarkPurple = (55, 25, 103)
 MainPurple = (110, 50, 205)
 LightPurple = (154, 153, 235)
-Red = (255, 0, 60)
-Blue = (58, 134, 255)
 Pink = (250, 172, 215)
 White = (255, 255, 255)
-Yellow = (255, 225, 0)
+Blue = (58, 134, 255)
 Green = (136, 255, 38)
+Red = (255, 0, 60)
+Yellow = (255, 225, 0)
 # PtwoColour = (0, 255, 242)
 
 # De volgende Variables zijn de bool values voor de games
@@ -78,6 +78,10 @@ SimonTimer = 0
 Check = False
 Lose = False
 
+LosePlayerTxt = "Hamudt"
+LoseTTTTTT = "Game over, iemand heeft verloren (Ik zeg niet wie maar het was " + LosePlayerTxt + ")."
+LoseTxt = MediumFont.render(LoseTTTTTT, True, Pink, DarkPurple)
+
 BluePlaceHolder = (21, 47, 89)
 GreenPlaceHolder = (35, 79, 0)
 RedPlaceHolder = (87, 0, 20)
@@ -119,15 +123,19 @@ while IsRunning:
                         if event.key == pygame.K_w:
                             PoneList.append(ColourList[0])
                             Check = True
+                            PoneBlueColour = BluePlaceHolder
                         if event.key == pygame.K_a:
                             PoneList.append(ColourList[1])
                             Check = True
+                            PoneRedColour = RedPlaceHolder
                         if event.key == pygame.K_s:
                             PoneList.append(ColourList[2])
                             Check = True
+                            PoneGreenColour = GreenPlaceHolder
                         if event.key == pygame.K_d:
                             PoneList.append(ColourList[3])
                             Check = True
+                            PoneYellowColour = YellowPlaceHolder
                     else:
                         SimonTurn = True
 
@@ -171,6 +179,7 @@ while IsRunning:
     if Key[pygame.K_SPACE]:
         GameStarted = True
         CountDown = True
+        Lose = False
 
     if Menu:
         win.fill(MainPurple)
@@ -216,14 +225,8 @@ while IsRunning:
         pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
         pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
 
-        def PoneColourUpdate():
-            print("oi")
-            pygame.draw.rect(win, PoneBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
-            pygame.draw.rect(win, PoneRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
-            pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
-            pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
-            pygame.display.update()
-        def ColourUpdate():
+
+        def PoneSimonColourUpdate():
             pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
             pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
             pygame.draw.rect(win, PoneSimonGreenColour, (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
@@ -239,22 +242,20 @@ while IsRunning:
                     if not PoneList[i] == PoneSimonList[i]:
                         GameStarted = False
                         Lose = True
-                        print("Game ended")
             Check = False
 
         if GameStarted and not Lose:
-            # print(PoneList, PoneSimonList)
             if CountDown:
                 if CountDownAmount == 1:
-                    pygame.draw.rect(win, White, (ScreenWidth/2-50, ScreenHeight/3, 100, 100))
+                    pygame.draw.rect(win, White, (math.floor(ScreenWidth/2-50), math.floor(ScreenHeight/3), 100, 100))
                     win.blit(Img1, (ScreenWidth/2-50, ScreenHeight/3))
                     CountDownAmount = 4
                     CountDown = False
                 if CountDownAmount == 2:
-                    pygame.draw.rect(win, White, (ScreenWidth/2-50, ScreenHeight/3, 100, 100))
+                    pygame.draw.rect(win, White, (math.floor(ScreenWidth/2-50), math.floor(ScreenHeight/3), 100, 100))
                     win.blit(Img2, (ScreenWidth/2-50, ScreenHeight/3))
                 if CountDownAmount == 3:
-                    pygame.draw.rect(win, White, (ScreenWidth/2-50, ScreenHeight/3, 100, 100))
+                    pygame.draw.rect(win, White, (math.floor(ScreenWidth/2-50), math.floor(ScreenHeight/3), 100, 100))
                     win.blit(Img3, (ScreenWidth/2-50, ScreenHeight/3))
                 CountDownAmount -= 1
                 pygame.display.update()
@@ -270,47 +271,46 @@ while IsRunning:
                         randomInt = random.randint(0, 3)
                         PoneSimonList.append(ColourList[randomInt])
 
-                        PoneBlueColour = BluePlaceHolder
-                        PoneGreenColour = GreenPlaceHolder
-                        PoneRedColour = RedPlaceHolder
-                        PoneYellowColour = YellowPlaceHolder
-                        PoneColourUpdate()
-
-                        print(PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour)
+                        # Reset de kleuren van de player na elke beurt
+                        PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
+                        pygame.draw.rect(win, PoneBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight/ 1.5), 50, 25))
+                        pygame.draw.rect(win, PoneRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight/1.5 + 50), 50, 25))
+                        pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight/1.5 + 25), 50, 25))
+                        pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight/1.5 + 25), 50, 25))
+                        pygame.display.update()
 
                         for x in PoneSimonList:
                             if x == "Blue":
                                 PoneSimonBlueColour = Blue
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(750)
                                 PoneSimonBlueColour = BluePlaceHolder
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(250)
                             elif x == "Green":
                                 PoneSimonGreenColour = Green
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(750)
                                 PoneSimonGreenColour = GreenPlaceHolder
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(250)
                             elif x == "Red":
                                 PoneSimonRedColour = Red
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(750)
                                 PoneSimonRedColour = RedPlaceHolder
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(250)
                             elif x == "Yellow":
                                 PoneSimonYellowColour = Yellow
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(750)
                                 PoneSimonYellowColour = YellowPlaceHolder
-                                ColourUpdate()
+                                PoneSimonColourUpdate()
                                 pygame.time.delay(250)
                     else:
                         SimonTurn = False
                         PoneList = [] # Reset de list van PlayerOne na elke beurt
-                        print(PoneSimonList[0])
                 else:
                     if Key[pygame.K_w]:
                         PoneBlueColour = Blue
@@ -329,21 +329,18 @@ while IsRunning:
                     else:
                         PoneYellowColour = YellowPlaceHolder
 
-                    # elif not PoneList == PoneSimonList and not SimonTurn:       # Als de combinatie van de player niet klopt zal er een end screen displayen
-                    #     GameStarted = False
-                    #     print("eeee")
+        elif not GameStarted and not Lose:
+            PoneSimonList = []      # Reset de list van PlayerOneSimon
+            PtwoSimonList = []      # Reset de list van PlayerTwoSimon
+            PoneList = []           # Reset de list van PlayerOne
+            PtwoList = []           # Reset de list van PlayerTwo
 
         elif not GameStarted and Lose:
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne
             PtwoList = []           # Reset de list van PlayerTwo
-
-        elif not GameStarted:       # De Values worden ge-reset nadat het spel is afgesloten
-            PoneSimonList = []      # Reset de list van PlayerOneSimon
-            PtwoSimonList = []      # Reset de list van PlayerTwoSimon
-            PoneList = []           # Reset de list van PlayerOne
-            PtwoList = []           # Reset de list van PlayerTwo
+            win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
 
     if LoadingEnd:
         if not LoadingTime == 0:

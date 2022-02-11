@@ -312,7 +312,6 @@ while IsRunning:
                     if len(PoneList) == len(PoneSimonList):
                         randomInt = random.randint(0, 3)
                         PoneSimonList.append(ColourList[randomInt])
-
                         for x in PoneSimonList:
                             if x == "Blue":
                                 PoneSimonBlueColour = Blue
@@ -345,6 +344,7 @@ while IsRunning:
                     else:
                         PoneReady = False
                         PoneList = []       # Reset de list van PlayerOne na elke beurt
+
                     if len(PtwoList) == len(PtwoSimonList):
                         randomIntTwo = random.randint(0, 3)
                         PtwoSimonList.append(ColourList[randomIntTwo])
@@ -420,7 +420,6 @@ while IsRunning:
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne
             PtwoList = []           # Reset de list van PlayerTwo
-
         if not GameStarted and PoneLose:
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
@@ -430,7 +429,6 @@ while IsRunning:
             LoseTxt = MediumFont.render(LoseTTTTTT, True, Pink, DarkPurple)
             win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
         if not GameStarted and PtwoLose:
-            print("Ptwo ded")
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne

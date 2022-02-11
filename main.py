@@ -77,9 +77,10 @@ SimonTurn = True
 SimonTimer = 0
 CheckOne = False
 CheckTwo = False
-PoneReady = False
-PtwoReady = False
-Lose = False
+PoneReady = True
+PtwoReady = True
+PoneLose = False
+PtwoLose = False
 
 LosePlayerTxt = "Hamudt"
 LoseTTTTTT = "Game over, iemand heeft verloren (Ik zeg niet wie maar het was " + LosePlayerTxt + ")."
@@ -93,10 +94,8 @@ YellowPlaceHolder = (87, 76, 0)
 PoneSimonBlueColour, PoneSimonGreenColour, PoneSimonRedColour, PoneSimonYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 PtwoSimonBlueColour, PtwoSimonGreenColour, PtwoSimonRedColour, PtwoSimonYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
-PoneBlueColour = BluePlaceHolder
-PoneGreenColour = GreenPlaceHolder
-PoneRedColour = RedPlaceHolder
-PoneYellowColour = YellowPlaceHolder
+PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
+PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
 
 # De volgende Variables zijn voor Game2
@@ -152,15 +151,6 @@ while IsRunning:
                             CheckTwo = True
                     if len(PoneList) >= len(PoneSimonList) and len(PtwoList >= len(PtwoSimonList)):
                         SimonTurn = True
-
-                if event.key == pygame.K_UP:
-                    PtwoList.append(ColourList[0])
-                if event.key == pygame.K_LEFT:
-                    PtwoList.append(ColourList[1])
-                if event.key == pygame.K_DOWN:
-                    PtwoList.append(ColourList[2])
-                if event.key == pygame.K_RIGHT:
-                    PtwoList.append(ColourList[3])
 
     def loading(val):
         for y in range(1, LoadingTime):
@@ -239,12 +229,29 @@ while IsRunning:
         pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
         pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
 
+        # Simon voor Player Two
+        pygame.draw.rect(win, PtwoSimonBlueColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
+        pygame.draw.rect(win, PtwoSimonRedColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
+        pygame.draw.rect(win, PtwoSimonGreenColour, (math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        pygame.draw.rect(win, PtwoSimonYellowColour, (math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        # Player Two
+        pygame.draw.rect(win, PtwoBlueColour, (math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+        pygame.draw.rect(win, PtwoRedColour, (math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+        pygame.draw.rect(win, PtwoGreenColour, (math.floor(ScreenWidth / 1.35 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+        pygame.draw.rect(win, PtwoYellowColour, (math.floor(ScreenWidth / 1.35 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+
 
         def PoneSimonColourUpdate():
             pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
             pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
             pygame.draw.rect(win, PoneSimonGreenColour, (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
             pygame.draw.rect(win, PoneSimonYellowColour, (math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.display.update()
+        def PtwoSimonColourUpdate():
+            pygame.draw.rect(win, PtwoSimonBlueColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
+            pygame.draw.rect(win, PtwoSimonRedColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
+            pygame.draw.rect(win, PtwoSimonGreenColour, (math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.draw.rect(win, PtwoSimonYellowColour, (math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
             pygame.display.update()
 
         if CheckOne:
@@ -264,7 +271,7 @@ while IsRunning:
                     if PtwoList == PtwoSimonList:
                         PtwoReady = True
 
-        if GameStarted and not Lose:
+        if GameStarted and not PoneLose and not PtwoLose:
             if CountDown:
                 if CountDownAmount == 1:
                     pygame.draw.rect(win, White, (math.floor(ScreenWidth/2-50), math.floor(ScreenHeight/3), 100, 100))
@@ -293,10 +300,16 @@ while IsRunning:
 
                         # Reset de kleuren van de player na elke beurt
                         PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
+                        PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
+
                         pygame.draw.rect(win, PoneBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight/ 1.5), 50, 25))
                         pygame.draw.rect(win, PoneRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight/1.5 + 50), 50, 25))
                         pygame.draw.rect(win, PoneGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight/1.5 + 25), 50, 25))
                         pygame.draw.rect(win, PoneYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight/1.5 + 25), 50, 25))
+                        pygame.draw.rect(win, PtwoBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+                        pygame.draw.rect(win, PtwoRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+                        pygame.draw.rect(win, PtwoGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                        pygame.draw.rect(win, PtwoYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                         pygame.display.update()
 
                         for x in PoneSimonList:
@@ -328,6 +341,36 @@ while IsRunning:
                                 PoneSimonYellowColour = YellowPlaceHolder
                                 PoneSimonColourUpdate()
                                 pygame.time.delay(250)
+
+                        for x in PoneSimonList:
+                            if x == "Blue":
+                                PtwoSimonBlueColour = Blue
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(750)
+                                PtwoSimonBlueColour = BluePlaceHolder
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(250)
+                            elif x == "Green":
+                                PtwoSimonGreenColour = Green
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(750)
+                                PtwoSimonGreenColour = GreenPlaceHolder
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(250)
+                            elif x == "Red":
+                                PtwoSimonRedColour = Red
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(750)
+                                PtwoSimonRedColour = RedPlaceHolder
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(250)
+                            elif x == "Yellow":
+                                PtwoSimonYellowColour = Yellow
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(750)
+                                PtwoSimonYellowColour = YellowPlaceHolder
+                                PtwoSimonColourUpdate()
+                                pygame.time.delay(250)
                     else:
                         PoneReady, PtwoReady = False, False
                         PoneList = [] # Reset de list van PlayerOne na elke beurt
@@ -349,17 +392,25 @@ while IsRunning:
                     else:
                         PoneYellowColour = YellowPlaceHolder
 
-        elif not GameStarted and not Lose:
+        elif not GameStarted and not PoneLose and PtwoLose:
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne
             PtwoList = []           # Reset de list van PlayerTwo
 
-        elif not GameStarted and Lose:
+        elif not GameStarted and PoneLose:
             PoneSimonList = []      # Reset de list van PlayerOneSimon
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne
             PtwoList = []           # Reset de list van PlayerTwo
+            LoseTxt = "Hamudt"
+            win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
+        elif not GameStarted and PtwoLose:
+            PoneSimonList = []      # Reset de list van PlayerOneSimon
+            PtwoSimonList = []      # Reset de list van PlayerTwoSimon
+            PoneList = []           # Reset de list van PlayerOne
+            PtwoList = []           # Reset de list van PlayerTwo
+            LoseTxt = "Eduardo"
             win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
 
     if LoadingEnd:

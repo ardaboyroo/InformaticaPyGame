@@ -172,6 +172,7 @@ while IsRunning:
         Game4 = False
         Game5 = False
         Game6 = False
+        PoneLose, PtwoLose = False, False
         LoadingTime = LoadingInt
         LoadingEnd = loading(LoadingEnd)
 

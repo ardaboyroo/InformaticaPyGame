@@ -75,7 +75,10 @@ CountDown = False
 CountDownAmount = 3
 SimonTurn = True
 SimonTimer = 0
-Check = False
+CheckOne = False
+CheckTwo = False
+PoneReady = False
+PtwoReady = False
 Lose = False
 
 LosePlayerTxt = "Hamudt"
@@ -87,10 +90,8 @@ GreenPlaceHolder = (35, 79, 0)
 RedPlaceHolder = (87, 0, 20)
 YellowPlaceHolder = (87, 76, 0)
 
-PoneSimonBlueColour = BluePlaceHolder
-PoneSimonGreenColour = GreenPlaceHolder
-PoneSimonRedColour = RedPlaceHolder
-PoneSimonYellowColour = YellowPlaceHolder
+PoneSimonBlueColour, PoneSimonGreenColour, PoneSimonRedColour, PoneSimonYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
+PtwoSimonBlueColour, PtwoSimonGreenColour, PtwoSimonRedColour, PtwoSimonYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
 PoneBlueColour = BluePlaceHolder
 PoneGreenColour = GreenPlaceHolder
@@ -122,21 +123,34 @@ while IsRunning:
                     if not len(PoneList) >= len(PoneSimonList):     # Als de PoneList niet gelijk is a
                         if event.key == pygame.K_w:
                             PoneList.append(ColourList[0])
-                            Check = True
+                            CheckOne = True
                             PoneBlueColour = BluePlaceHolder
                         if event.key == pygame.K_a:
                             PoneList.append(ColourList[1])
-                            Check = True
+                            CheckOne = True
                             PoneRedColour = RedPlaceHolder
                         if event.key == pygame.K_s:
                             PoneList.append(ColourList[2])
-                            Check = True
+                            CheckOne = True
                             PoneGreenColour = GreenPlaceHolder
                         if event.key == pygame.K_d:
                             PoneList.append(ColourList[3])
-                            Check = True
+                            CheckOne = True
                             PoneYellowColour = YellowPlaceHolder
-                    else:
+                    if not len(PtwoList >= len(PtwoSimonList)):
+                        if event.key == pygame.K_UP:
+                            PtwoList.append(ColourList[0])
+                            CheckTwo = True
+                        if event.key == pygame.K_LEFT:
+                            PtwoList.append(ColourList[1])
+                            CheckTwo = True
+                        if event.key == pygame.K_DOWN:
+                            PtwoList.append(ColourList[2])
+                            CheckTwo = True
+                        if event.key == pygame.K_RIGHT:
+                            PtwoList.append(ColourList[3])
+                            CheckTwo = True
+                    if len(PoneList) >= len(PoneSimonList) and len(PtwoList >= len(PtwoSimonList)):
                         SimonTurn = True
 
                 if event.key == pygame.K_UP:
@@ -233,16 +247,22 @@ while IsRunning:
             pygame.draw.rect(win, PoneSimonYellowColour, (math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
             pygame.display.update()
 
-        if Check:
+        if CheckOne:
             for x in range(0, len(PoneList)+1):
                 if len(PoneList) == len(PoneSimonList):
                     if PoneList == PoneSimonList:
-                        SimonTurn = True
+                        PoneReady = True
                 for i in range(len(PoneList)):
                     if not PoneList[i] == PoneSimonList[i]:
                         GameStarted = False
                         Lose = True
-            Check = False
+                        # maak een PoneLose(ook voor ptwo)
+            CheckOne = False
+        if CheckTwo:
+            for x in range(0, len(PtwoList)+1):
+                if len(PtwoList) == len(PtwoSimonList):
+                    if PtwoList == PtwoSimonList:
+                        PtwoReady = True
 
         if GameStarted and not Lose:
             if CountDown:
@@ -266,7 +286,7 @@ while IsRunning:
                 PtwoList = []  # Reset de list van PlayerTwo
 
             else:       # Als het spel is begonnen gaat de volgende code runnen
-                if SimonTurn:
+                if PoneReady and PtwoReady:
                     if len(PoneList) == len(PoneSimonList):
                         randomInt = random.randint(0, 3)
                         PoneSimonList.append(ColourList[randomInt])
@@ -309,7 +329,7 @@ while IsRunning:
                                 PoneSimonColourUpdate()
                                 pygame.time.delay(250)
                     else:
-                        SimonTurn = False
+                        PoneReady, PtwoReady = False, False
                         PoneList = [] # Reset de list van PlayerOne na elke beurt
                 else:
                     if Key[pygame.K_w]:

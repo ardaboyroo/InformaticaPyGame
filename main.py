@@ -1,12 +1,9 @@
 import pygame
 import random
 import math
-import itertools
 
 pygame.init()
 pygame.mixer.init()
-hitSound = pygame.mixer.Sound("Sounds/hitmarker_2.mp3")
-hitSound.set_volume(0.1)
 
 ScreenWidth = 1200  # De breedte van het scherm in pixels
 ScreenHeight = 700  # De hoogte van het scherm in pixels
@@ -45,6 +42,9 @@ Game6 = False
 Img1 = pygame.transform.scale(pygame.image.load("Sprites/1.png"), (100, 100))
 Img2 = pygame.transform.scale(pygame.image.load("Sprites/2.png"), (100, 100))
 Img3 = pygame.transform.scale(pygame.image.load("Sprites/3.png"), (100, 100))
+RandPNG = pygame.transform.scale(pygame.image.load("Sprites/RandomSprite.png"), (114, 100))
+hitSound = pygame.mixer.Sound("Sounds/hitmarker_2.mp3")
+hitSound.set_volume(0.1)
 IsRunning = True  # Een boolean voor de while loop
 Menu = True
 BigFont = pygame.font.Font("freesansbold.ttf", 32)
@@ -221,7 +221,7 @@ while IsRunning:
         Game4Icon = pygame.draw.rect(win, Black, (225, 350, 150, 100))
         Game5Icon = pygame.draw.rect(win, Black, (525, 350, 150, 100))
         Game6Icon = pygame.draw.rect(win, Black, (825, 350, 150, 100))
-        RandomIcon = pygame.draw.rect(win, White, (525, 550, 150, 100))
+        win.blit(RandPNG, (543, 550))
 
         if pygame.mouse.get_pressed()[0]:
             MouseX = pygame.mouse.get_pos()[0]
@@ -307,7 +307,6 @@ while IsRunning:
 
 
         def PoneSimonColourUpdate():
-            print("updated")
             pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
             pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
             pygame.draw.rect(win, PoneSimonGreenColour, (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
@@ -379,6 +378,8 @@ while IsRunning:
                         PoneSimonList.append(ColourList[randomInt])
                         PtwoSimonList.append(ColourList[randomIntTwo])
                         for (x, y) in zip(PoneSimonList, PtwoSimonList):        # Hiermee kunnen er twee lists in een for loop worden gebruikt
+                            pygame.draw.rect(win, White, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight/ 6+50), 100, 50))
+                            pygame.draw.rect(win, White, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight/ 6+50), 100, 50))
                             if x == "Blue":
                                 PoneSimonBlueColour = Blue
                             if x == "Green":
@@ -397,7 +398,7 @@ while IsRunning:
                             if y == "Yellow":
                                 PtwoSimonYellowColour = Yellow
                             PoneSimonColourUpdate()
-                            pygame.time.delay(750-int(len(PoneSimonList)))
+                            pygame.time.delay(750-(5*int(len(PoneSimonList))))
                             PoneSimonBlueColour = BluePlaceHolder
                             PoneSimonGreenColour = GreenPlaceHolder
                             PoneSimonRedColour = RedPlaceHolder
@@ -407,49 +408,18 @@ while IsRunning:
                             PtwoSimonRedColour = RedPlaceHolder
                             PtwoSimonYellowColour = YellowPlaceHolder
                             PoneSimonColourUpdate()
-                            pygame.time.delay(250-int(len(PoneSimonList)))
+                            pygame.time.delay(250-(5*int(len(PoneSimonList))))
 
                     else:
                         PoneReady, PtwoReady = False, False
                         PoneList = []       # Reset de list van PlayerOne na elke beurt
                         PtwoList = []
 
-                    """   
-                    if len(PtwoList) == len(PtwoSimonList):
-                        for x in PtwoSimonList:
-                            if x == "Blue":
-                                PtwoSimonBlueColour = Blue
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(750)
-                                PtwoSimonBlueColour = BluePlaceHolder
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(250)
-                            elif x == "Green":
-                                PtwoSimonGreenColour = Green
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(750)
-                                PtwoSimonGreenColour = GreenPlaceHolder
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(250)
-                            elif x == "Red":
-                                PtwoSimonRedColour = Red
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(750)
-                                PtwoSimonRedColour = RedPlaceHolder
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(250)
-                            elif x == "Yellow":
-                                PtwoSimonYellowColour = Yellow
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(750)
-                                PtwoSimonYellowColour = YellowPlaceHolder
-                                PtwoSimonColourUpdate()
-                                pygame.time.delay(250)
-                    else:
-                        PtwoReady = False
-                        PtwoList = []       # Reset de list van PlayerTwo na elke beurt
-                    """
                 else:
+                    if not PoneReady:
+                        pygame.draw.rect(win, White, (math.floor(ScreenWidth / 5+25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                    if not PtwoReady:
+                        pygame.draw.rect(win, White, (math.floor(ScreenWidth / 1.35+25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     if Key[pygame.K_w]:
                         PoneBlueColour = Blue
                     else:

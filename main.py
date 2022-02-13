@@ -42,6 +42,7 @@ Game6 = False
 Img1 = pygame.transform.scale(pygame.image.load("Sprites/1.png"), (100, 100))
 Img2 = pygame.transform.scale(pygame.image.load("Sprites/2.png"), (100, 100))
 Img3 = pygame.transform.scale(pygame.image.load("Sprites/3.png"), (100, 100))
+Game1Img = pygame.transform.scale(pygame.image.load("Sprites/InkedGame1_LI.jpg"), (150, 100))
 RandPNG = pygame.transform.scale(pygame.image.load("Sprites/RandomSprite.png"), (114, 100))
 hitSound = pygame.mixer.Sound("Sounds/hitmarker_2.mp3")
 hitSound.set_volume(0.1)
@@ -109,8 +110,6 @@ PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHold
 
 
 # De volgende Variables zijn voor Game2
-# SumoH = pygame.image.load("SumoH.png")
-# SumoE = pygame.image.load("SumoE.png")
 
 
 while IsRunning:
@@ -216,6 +215,7 @@ while IsRunning:
         win.blit(TitleTxt, TitleTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
 
         Game1Icon = pygame.draw.rect(win, Black, (225, 150, 150, 100))
+        win.blit(Game1Img, (225, 150))
         Game2Icon = pygame.draw.rect(win, Black, (525, 150, 150, 100))
         Game3Icon = pygame.draw.rect(win, Black, (825, 150, 150, 100))
         Game4Icon = pygame.draw.rect(win, Black, (225, 350, 150, 100))
@@ -458,7 +458,7 @@ while IsRunning:
             PtwoSimonList = []      # Reset de list van PlayerTwoSimon
             PoneList = []           # Reset de list van PlayerOne
             PtwoList = []           # Reset de list van PlayerTwo
-            win.blit(SpaceToStartTxt, SpaceToStartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2)))
+            # win.blit(SpaceToStartTxt, SpaceToStartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2)))
         if not GameStarted and PoneLose:
             PoneSimonList = []
             PtwoSimonList = []

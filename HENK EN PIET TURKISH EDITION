@@ -4,6 +4,7 @@ pygame.init()
 win = pygame.display.set_mode((1200, 700))
 pygame.display.set_caption("henki")
 run = True
+Universalspeed = 10
 flowdirection = -40
 F = 1
 flowdirection1 = 40
@@ -16,7 +17,17 @@ bridge1x = 400
 bridgex = 800
 C = 255
 HenkLife = True
-
+PietLife = True
+deathbarrier = pygame.Rect(0, 0, 50, 700)
+deathbarrier1 = pygame.Rect(1155, 0, 100, 700)
+player1 = "Runner"
+def randomplayer():
+    R = random.randint(1,2)
+    global player1
+    if R == 1:
+        player1 = "Chaser"
+    else:
+        player1 = "Runner"
 def flowrandom():
     flownum = random.randint(1, 2)
     global flowdirection
@@ -71,7 +82,7 @@ class bullet:
    def move(self, yspeed):
        self.rect.y -= yspeed
 
-class Player:
+class Runner:
    def __init__(self, Playerx, Playery):
        self.image = pygame.Surface((75, 75))
        self.image.fill((C, C, C))
@@ -118,7 +129,7 @@ class Bridge:
 
 singleflow = 0
 Flowright = False
-henk = Player(200, 200)
+henk = Runner(200, 200)
 piet = Chaser(100, 600)
 river1 = River(0, 300)
 river2 = River(0, -200)
@@ -127,31 +138,45 @@ bridge2 = Bridge(bridgex, river2.rect.y)
 Buletis = False
 Bullet = bullet(2, piet.rect.x + 50, piet.rect.y + 25)
 bulletexists = False
+randomplayer()
 while run:
    win.fill((59, 186, 24))
    pygame.time.delay(33)
-   pygame.draw.rect(win, (0, 50, 255), (0, 0, 100, 700))
-   pygame.draw.rect(win, (0, 50, 255), (1105, 0, 100, 700))
    for event in pygame.event.get():
        if event.type == pygame.QUIT:
            run = False
 # player 1 movement
    press = pygame.key.get_pressed()
-   if press[pygame.K_s]:
-       henk.move(0, 15)
-   if press[pygame.K_d]:
-       henk.move(15, 0)
-   if press[pygame.K_w]:
-       henk.move(0, -15)
-   if press[pygame.K_a]:
-       henk.move(-15, 0)
-
+   if player1 == "Runner":
+       if press[pygame.K_s]:
+           henk.move(0, 15)
+       if press[pygame.K_d]:
+           henk.move(15, 0)
+       if press[pygame.K_w]:
+           henk.move(0, -15)
+       if press[pygame.K_a]:
+           henk.move(-15, 0)
+    #player 2 movement
+       if press[pygame.K_LEFT] and piet.rect.x > 100:
+           piet.move(-10)
+       if press[pygame.K_RIGHT] and piet.rect.x <= 1020:
+           piet.move(10)
+   else:
+       if press[pygame.K_a] and piet.rect.x > 100:
+           piet.move(-10)
+       if press[pygame.K_d] and piet.rect.x <= 1020:
+           piet.move(10)
+       # player 2 movement
+       if press[pygame.K_DOWN]:
+           henk.move(0, 15)
+       if press[pygame.K_RIGHT]:
+           henk.move(15, 0)
+       if press[pygame.K_UP]:
+           henk.move(0, -15)
+       if press[pygame.K_LEFT]:
+           henk.move(-15, 0)
 #player 2 movement
-   if press[pygame.K_LEFT] and piet.rect.x > 100:
-       piet.move(-10)
-   if press[pygame.K_RIGHT] and piet.rect.x <= 1020:
-       piet.move(10)
-   if press[pygame.K_SPACE]:
+   if press[pygame.K_RCTRL]:
        if Buletis:
            if Bullet.rect.y < 0:
                Bullet.rect.x = piet.rect.x + 33
@@ -177,44 +202,46 @@ while run:
        bridgex += 5
        bridge2.move(5, 0)
 
-
    if henk.rect.colliderect(bridge1):
-       henk.move(flowdirection1 + 35*F1, 5)
+       henk.move(flowdirection1 + 35*F1, Universalspeed)
    if henk.rect.colliderect(bridge2):
-       henk.move(flowdirection + 35*F, 5)
+       henk.move(flowdirection + 35*F, Universalspeed)
 
    #rivermovemet and directions
    if river1.rect.y < 700:
        if henk.rect.colliderect(river1) and not henk.rect.colliderect(bridge1):
            henk.move(flowdirection1, 0)
-       if river1.rect.y == 695:
+       if river1.rect.y == 690:
           river1.down(-1000)
           bridge1.move(0, -1000)
-       bridge1.move(0, 5)
-       river1.down(5)
+       bridge1.move(0, Universalspeed)
+       river1.down(Universalspeed)
    if river1.rect.y <= -150:
        flowrandom1()
        setbridge1x()
    if river2.rect.y < 700:
        if henk.rect.colliderect(river2) and not henk.rect.colliderect(bridge2):
            henk.move(flowdirection, 0)
-       if river2.rect.y == 695:
+       if river2.rect.y == 690:
            river2.down(-1000)
            bridge2.move(0, -1000)
-       bridge2.move(0, 5)
-       river2.down(5)
+       bridge2.move(0, Universalspeed)
+       river2.down(Universalspeed)
    if river2.rect.y <= -150:
        flowrandom()
        setbridgex()
 
    if henk.rect.colliderect(Bullet):
-       C -= 51
-       if C == 0:
+       if C != 0:
+           C -= 51
+       else:
            HenkLife = False
-
-   if not HenkLife:
-       print("print")
-
+   if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(deathbarrier1):
+       HenkLife = False
+   if HenkLife == False:
+       print("penis")
+       C = 0
+       Universalspeed = 0
   # drawing time
    win.blit(river1.image, river1.rect)
    win.blit(river2.image, river2.rect)
@@ -225,6 +252,8 @@ while run:
    win.blit(piet.image, piet.rect)
    win.blit(henk.image, henk.rect)
    pygame.draw.rect(win, (C, C, C), (henk.rect.x, henk.rect.y, 75, 75))
+   pygame.draw.rect(win, (0, 50, 255), (0, 0, 100, 700))
+   pygame.draw.rect(win, (0, 50, 255), (1105, 0, 100, 700))
    pygame.display.update()
 
 pygame.quit()

@@ -71,7 +71,7 @@ RandomGameRect = pygame.Rect(525, 550, 150, 100)
 PoneBGC = Black
 PtwoBGC = Black
 
-# De volgende Variables zijn voor Game1
+# -----------------De volgende Variables zijn voor Game1-----------------
 GameStarted = False
 ColourList = ["Blue", "Green", "Red", "Yellow"]
 PoneSimonList = []
@@ -109,9 +109,23 @@ PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHold
 PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
 
-# De volgende Variables zijn voor Game2
+# -----------------De volgende Variables zijn voor Game2-----------------
+PoneSpeed = 15
+PtwoSpeed = 15
+
+class Pointer:
+    def __init__(self, PointerX):
+        self.image = pygame.Surface((5,20))
+        self.image.fill(LightPurple)
+        self.rect = self.image.get_rect()
+        self.rect.x = PointerX
+
+    def move(self, Sped):
+        self.rect.x += Sped
 
 
+PonePointerX = 500
+PonePoint = Pointer(PonePointerX)
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
 
@@ -197,9 +211,10 @@ while IsRunning:
             if not GameStarted:
                 GameStarted = True
                 CountDown = True
-                ScoreDebounce = False
                 PoneReady, PtwoReady = True, True
                 PoneLose, PtwoLose = False, False
+                if Game1:
+                    ScoreDebounce = False
 
     if Menu:
         win.fill(MainPurple)
@@ -274,7 +289,7 @@ while IsRunning:
                     Game6 = True
                 LoadingTime = LoadingInt
                 LoadingEnd = loading(LoadingEnd)
-
+    # """
     if Game1:
         win.fill(Gray)      # Teken de achtergrond
         PoneBGC, PtwoBGC = Gray, Gray       # Achtergrond voor de score names
@@ -481,9 +496,34 @@ while IsRunning:
             LoseTxtFunc("Eduardo")
             win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
-
+    # """
     if Game2:
-        win.fill(MainPurple)
+        win.fill(White)
+        PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+
+        if CountDown:
+            if CountDownAmount == 1:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img1, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+                CountDownAmount = 4
+                CountDown = False
+            if CountDownAmount == 2:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img2, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            if CountDownAmount == 3:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img3, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            CountDownAmount -= 1
+            pygame.display.update()
+            pygame.time.delay(500)
+        else:
+            PonePointerX = 500
+
+            PonePoint.move(1)
+            win.blit(PonePoint.image, PonePoint.rect)
+
 
     if Game3:
         win.fill(DarkPurple)

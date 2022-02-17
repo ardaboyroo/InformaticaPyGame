@@ -110,22 +110,28 @@ PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHold
 
 
 # -----------------De volgende Variables zijn voor Game2-----------------
-PoneSpeed = 15
-PtwoSpeed = 15
+PonePointerSpeed = 5
+PtwoPointerSpeed = 5
 
 class Pointer:
     def __init__(self, PointerX):
         self.image = pygame.Surface((5,20))
         self.image.fill(LightPurple)
         self.rect = self.image.get_rect()
+        # self.rect.y = ScreenHeight*0.7
         self.rect.x = PointerX
 
     def move(self, Sped):
         self.rect.x += Sped
 
 
-PonePointerX = 500
+PonePointerX = ScreenWidth*0.25
+PtwoPointerX = ScreenWidth*0.75
+
 PonePoint = Pointer(PonePointerX)
+PtwoPoint = Pointer(PtwoPointerX)
+
+
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
 
@@ -519,10 +525,18 @@ while IsRunning:
             pygame.display.update()
             pygame.time.delay(500)
         else:
-            PonePointerX = 500
+            if GameStarted:
+                if PonePoint.rect.x > ScreenWidth*(3/8):
+                    PonePointerSpeed *= -1
+                elif PonePoint.rect.x < ScreenWidth*(1/8):
+                    PonePointerSpeed *= -1
+                PonePoint.move(PonePointerSpeed)
 
-            PonePoint.move(1)
-            win.blit(PonePoint.image, PonePoint.rect)
+                win.blit(PonePoint.image, PonePoint.rect)       # Draw de Pointer voor Hamudt
+                win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
+
+                if PonePoint.rect.colliderect(PtwoPoint.rect):
+                    print("HOMOO")
 
 
     if Game3:

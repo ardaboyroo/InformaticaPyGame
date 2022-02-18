@@ -25,15 +25,24 @@ cosnumber = 0
 cosN = 1
 Missilespeed = 0
 Missile = pygame.transform.scale(pygame.image.load("missile.png"), (32, 64))
-
-
+Killer = pygame.transform.scale(pygame.image.load("KillerFish.png"), (74, 114))
+Eduardoplane = pygame.transform.scale(pygame.image.load("EduardoPlane.png"), (75, 75))
+Hamudplane = pygame.transform.scale(pygame.image.load("HamudtPlane.png"), (75, 75))
+Chaserimage = Eduardoplane
+brug = pygame.transform.scale(pygame.image.load("brug.png"), (150, 139))
+gameover = False
+Henkwins = False
+Pietwins = False
 def randomplayer():
     R = random.randint(1,2)
     global player1
+    global Chaserimage
     if R == 1:
         player1 = "Chaser"
+        Chaserimage = Hamudplane
     else:
         player1 = "Runner"
+        Chaserimage = Eduardoplane
 def flowrandom():
     flownum = random.randint(1, 2)
     global flowdirection
@@ -102,9 +111,8 @@ class Runner:
        self.rect.y += Movey
 
 class Chaser:
-   def __init__(self, Chaserx, Chasery):
-       self.image = pygame.Surface((75, 75))
-       self.image.fill((0, 0, 0))
+   def __init__(self, Chaserx, Chasery, image):
+       self.image = image
        self.rect = self.image.get_rect()
        self.rect.x = Chaserx
        self.rect.y = Chasery
@@ -122,58 +130,56 @@ class River:
 
    def down(self, fallspeed):
        self.rect.y += fallspeed
+
 class Bridge:
     def __init__(self, bridgenumber, rivernumber):
-        self.image = pygame.Surface((150, 137))
-        self.image.fill((139, 69, 19))
+        self.image = brug
         self.rect = self.image.get_rect()
         self.rect.x = bridgenumber
-        self.rect.y = rivernumber-6
+        self.rect.y = rivernumber-10
 
     def move(self, Movex, Movey):
        self.rect.x += Movex
        self.rect.y += Movey
-
+randomplayer()
 singleflow = 0
 Flowright = False
-henk = Runner(200, 200)
-piet = Chaser(100, 600)
+henk = Runner(600, 200)
+piet = Chaser(600, 600, Chaserimage)
 river1 = River(0, 300)
 river2 = River(0, -200)
 bridge1 = Bridge(bridge1x, river1.rect.y)
 bridge2 = Bridge(bridgex, river2.rect.y)
 Bulletis = False
 airbombis = False
-Bullet = bullet(piet.rect.x + 50, piet.rect.y + 25, Missile)
-airbomb = bullet(henk.rect.x + 33, henk.rect.y, Missile )
+Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
+KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
 SPED = -4
-
-randomplayer()
 def shoot():
     global Bulletis
     global Bullet
     global Missilespeed
     global SPED
     if Bulletis:
-        if Bullet.rect.y < 0:
-            Bullet.rect.x = piet.rect.x + 33
+        if Bullet.rect.y < -17000:
+            Bullet.rect.x = piet.rect.x + 20
             Bullet.rect.y = piet.rect.y + 10
             Missilespeed = 0
-            SPED = -4
+            SPED = -2
     else:
-        Bullet = bullet(piet.rect.x + 50, piet.rect.y + 25, Missile)
+        Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
         Bulletis = True
         Missilespeed = 0
-        SPED = -4
+        SPED = -2
 def shoot2():
     global airbombis
-    global airbomb
+    global KillerFish
     if airbombis:
-        if airbomb.rect.y > 700:
-            airbomb.rect.x = henk.rect.x + 33
-            airbomb.rect.y = henk.rect.y + 60
+        if KillerFish.rect.y > 700:
+            KillerFish.rect.x = henk.rect.x + 33
+            KillerFish.rect.y = henk.rect.y + 60
     else:
-        airbomb = bullet(henk.rect.x + 50, henk.rect.y + 25, Missile)
+        KillerFish = bullet(henk.rect.x + 50, henk.rect.y + 25, Killer)
         airbombis = True
 while run:
    win.fill((59, 186, 24))
@@ -227,9 +233,9 @@ while run:
    if Bulletis:
        Bullet.move(Missilespeed, 0)
        Missilespeed = Missilespeed + SPED
-       SPED += 2
+       SPED += 1
    if airbombis:
-       airbomb.move(-10, cosnumber)
+       KillerFish.move(-5, cosnumber)
        cosnumber -= cosN
        if cosnumber == 16 or cosnumber == -16:
            cosN *= -1
@@ -280,7 +286,6 @@ while run:
    if river2.rect.y <= -150:
        flowrandom()
        setbridgex()
-
     #henk gets hit
    if henk.rect.colliderect(Bullet):
        if C != 0:
@@ -289,11 +294,23 @@ while run:
            HenkLife = False
    if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(deathbarrier1) or henk.rect.y >= 650:
        HenkLife = False
-   if HenkLife == False:
-       print(str(Missilespeed))
-       C = 0
+       Pietwins = True
+   #piet gets hit
+   if piet.rect.colliderect(KillerFish):
+       PietLife = False
+       Henkwins = True
+   #game over
+   if not HenkLife or not PietLife:
+       gameover = True
+   if gameover:
        Universalspeed = 0
-  # drawing time
+
+       if Henkwins:
+           piet.move(1000)
+       else:
+           C = 0
+
+   # drawing time
    win.blit(river1.image, river1.rect)
    win.blit(river2.image, river2.rect)
    win.blit(bridge1.image, bridge1.rect)
@@ -303,11 +320,10 @@ while run:
    if Bulletis:
        win.blit(Bullet.image, Bullet.rect)
    if airbombis:
-       win.blit(airbomb.image, airbomb.rect)
+       win.blit(KillerFish.image, KillerFish.rect)
    win.blit(piet.image, piet.rect)
    win.blit(henk.image, henk.rect)
    pygame.draw.rect(win, (C, C, C), (henk.rect.x, henk.rect.y, 75, 75))
    pygame.display.update()
 
 pygame.quit()
-

@@ -118,7 +118,7 @@ class Pointer:
         self.image = pygame.Surface((5,20))
         self.image.fill(LightPurple)
         self.rect = self.image.get_rect()
-        # self.rect.y = ScreenHeight*0.7
+        self.rect.y = ScreenHeight*(3/4)
         self.rect.x = PointerX
 
     def move(self, Sped):
@@ -504,17 +504,15 @@ while IsRunning:
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
     # """
     if Game2:
-        bg = pygame.transform.scale(pygame.image.load("Sprites/Game1.png"), (1200, 700))
-        win.blit(bg, (0,0))
+        win.fill(MainPurple)
         PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
         pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een witte lijn
 
-        pygame.draw.rect(win, White, (ScreenWidth*(1/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
-        pygame.draw.rect(win, White, (ScreenWidth*(5/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
-
+        pygame.draw.rect(win, Gray, (ScreenWidth*(1/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
+        pygame.draw.rect(win, Gray, (ScreenWidth*(5/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
 
         if CountDown:
             if CountDownAmount == 1:
@@ -535,19 +533,17 @@ while IsRunning:
 
             if GameStarted:
 
-                if PonePoint.rect.x > ScreenWidth*(3/8):
+                if PonePoint.rect.x > ScreenWidth*(3/8)-10:
                     PonePointerSpeed *= -1
-                elif PonePoint.rect.x < ScreenWidth*(1/8):
+                elif PonePoint.rect.x < ScreenWidth*(1/8)+5:
                     PonePointerSpeed *= -1
                 PonePoint.move(PonePointerSpeed)
 
                 win.blit(PonePoint.image, PonePoint.rect)       # Draw de Pointer voor Hamudt
                 win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
 
-
-                if PonePoint.rect.colliderect(PtwoPoint.rect):
-                    print("HOMOO")
-
+                # if PonePoint.rect.colliderect():      # Check of het collide met het Groene stuk
+                #     print("e")
 
     if Game3:
         win.fill(DarkPurple)

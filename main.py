@@ -8,7 +8,7 @@ pygame.mixer.init()
 ScreenWidth = 1200  # De breedte van het scherm in pixels
 ScreenHeight = 700  # De hoogte van het scherm in pixels
 win = pygame.display.set_mode((ScreenWidth, ScreenHeight))  # Breedte en Hoogte van het scherm in aantal pixels
-pygame.display.set_caption("Arda en Nieks reetro Arkade")   # De caption van de window
+pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade")   # De caption van de window
 
 """ Dit is voor FULLSCREEN
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -28,7 +28,6 @@ Blue = (58, 134, 255)
 Green = (136, 255, 38)
 Red = (255, 0, 60)
 Yellow = (255, 225, 0)
-# PtwoColour = (0, 255, 242)
 
 # De volgende Variables zijn de bool values voor de games
 Game1 = False       # Simon Says
@@ -110,27 +109,42 @@ PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHold
 
 
 # -----------------De volgende Variables zijn voor Game2-----------------
-PonePointerSpeed = 5
-PtwoPointerSpeed = 5
+PonePointerSpeed = 10
+eee = 0
+PonePressed = False
+
 
 class Pointer:
     def __init__(self, PointerX):
-        self.image = pygame.Surface((5,20))
-        self.image.fill(LightPurple)
+        self.image = pygame.Surface((5,28))
+        self.image.fill(Black)
         self.rect = self.image.get_rect()
-        self.rect.y = ScreenHeight*(3/4)
+        self.rect.y = ScreenHeight*(3/4)-4
         self.rect.x = PointerX
 
     def move(self, Sped):
         self.rect.x += Sped
 
+class RedBar:
+    def __init__(self):
+        self.image = pygame.Surface((5, 20))
+        self.rect = self.image.get_rect()
+        self.rect.y = ScreenHeight*(3/4)
+
+    def SetSize(self, RedBarSize, RedBarPos):
+        self.image = pygame.Surface((RedBarSize, 20))
+        self.image.fill(Red)
+        self.rect.x = RedBarPos
+    # def SetPos(self, RandPos):
+    #     self.rect.x += RandPos
+PoneRedBarDrawed = False
 
 PonePointerX = ScreenWidth*0.25
 PtwoPointerX = ScreenWidth*0.75
 
 PonePoint = Pointer(PonePointerX)
 PtwoPoint = Pointer(PtwoPointerX)
-
+PoneRedBar = RedBar()
 
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
@@ -224,6 +238,7 @@ while IsRunning:
 
     if Menu:
         win.fill(MainPurple)
+        pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade")  # De caption van de window
         PoneBGC, PtwoBGC = White, White
         for x in range(1, 100):  # Deze for-loop zorgt voor een "Retro Scan Lines" effect
             pygame.draw.rect(win, Black, (0, (x * 9 - 4), ScreenWidth, 2))
@@ -295,9 +310,10 @@ while IsRunning:
                     Game6 = True
                 LoadingTime = LoadingInt
                 LoadingEnd = loading(LoadingEnd)
-    # """
+
     if Game1:
         win.fill(Gray)      # Teken de achtergrond
+        pygame.display.set_caption("Arda en Nieks reetro Arkade: Simone zegt")      # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, Gray       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
@@ -502,17 +518,32 @@ while IsRunning:
             LoseTxtFunc("Eduardo")
             win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
-    # """
+
     if Game2:
         win.fill(MainPurple)
+        pygame.display.set_caption("Arda en Nieks reetro Arkade: gunter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
-        pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een witte lijn
+        pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een Zwarte lijn
 
-        pygame.draw.rect(win, Gray, (ScreenWidth*(1/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
-        pygame.draw.rect(win, Gray, (ScreenWidth*(5/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
+        """ Volgorde
+        background
+        lijn voor onderscheid
+        Gray bar/area voor de players
+        Rode Bar
+        Ultiem Rood
+        Groene Bar
+        Gele Bar
+        Pointer
+        """
+        Barz = White
+        pygame.draw.rect(win, Barz, (ScreenWidth*(1/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
+        pygame.draw.rect(win, Barz, (ScreenWidth*(5/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
+
+
+
 
         if CountDown:
             if CountDownAmount == 1:
@@ -537,13 +568,21 @@ while IsRunning:
                     PonePointerSpeed *= -1
                 elif PonePoint.rect.x < ScreenWidth*(1/8)+5:
                     PonePointerSpeed *= -1
-                PonePoint.move(PonePointerSpeed)
 
+                eee = random.randint(ScreenWidth*(1/8), ScreenWidth*(3/8))
+
+                PonePoint.move(PonePointerSpeed)        # Beweeg de PonePointer
+                # if PonePoint.rect.colliderect(PoneRedBar.rect):       # Check of de Pointer collide met de RedBar
+                #     # Straf Pone
+
+                # if PonePoint.rect.colliderect() and PonePressed:      # Check of het collide met het Groene stuk
+                #     print("e")
+                if not PoneRedBarDrawed:
+                    PoneRedBar.SetSize(60, eee)
+                    PoneRedBarDrawed = True
+                win.blit(PoneRedBar.image, PoneRedBar.rect)     # Draw de RedBar
                 win.blit(PonePoint.image, PonePoint.rect)       # Draw de Pointer voor Hamudt
                 win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
-
-                # if PonePoint.rect.colliderect():      # Check of het collide met het Groene stuk
-                #     print("e")
 
     if Game3:
         win.fill(DarkPurple)

@@ -112,14 +112,14 @@ PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHold
 PonePointerSpeed = 10
 eee = 0
 PonePressed = False
-
+PoneRedBarCollided = False
 
 class Pointer:
     def __init__(self, PointerX):
         self.image = pygame.Surface((5,28))
         self.image.fill(Black)
         self.rect = self.image.get_rect()
-        self.rect.y = ScreenHeight*(3/4)-4
+        self.rect.y = ScreenHeight*(7/8)-4
         self.rect.x = PointerX
 
     def move(self, Sped):
@@ -128,23 +128,47 @@ class Pointer:
 class RedBar:
     def __init__(self):
         self.image = pygame.Surface((5, 20))
+        self.image.fill(Red)
         self.rect = self.image.get_rect()
-        self.rect.y = ScreenHeight*(3/4)
+        self.rect.y = ScreenHeight*(7/8)
 
     def SetSize(self, RedBarSize, RedBarPos):
         self.image = pygame.Surface((RedBarSize, 20))
         self.image.fill(Red)
-        self.rect.x = RedBarPos
-    # def SetPos(self, RandPos):
-    #     self.rect.x += RandPos
-PoneRedBarDrawed = False
+        self.rect = self.image.get_rect()
+        self.rect.y = ScreenHeight*(7/8)
+        self.rect.x = ScreenWidth*(1/8)+RedBarPos
 
+
+class GreenBar:
+    def __init__(self):
+        self.image = pygame.Surface((5, 20))
+        self.image.fill(Green)
+        self.rect = self.image.get_rect()
+        self.rect.y = ScreenHeight*(7/8)
+
+    def SetSize(self, GreenBarSize, GreenBarPos):
+        # self.image = pygame.Surface((5, 20))
+        self.image = pygame.Surface((GreenBarSize, 20))
+        self.image.fill(Green)
+        self.rect = self.image.get_rect()
+        self.rect.y = ScreenHeight*(7/8)
+        print(PoneRedBar.image.get_width())
+        self.rect.x = (PoneRedBar.image.get_width()/2)+(ScreenWidth*(1/8))+GreenBarPos-(self.image.get_width()/2)
+
+        # self.rect.x = PoneRedBar.image.get_width()/2
+
+
+PoneRedBarDrawed = False
+PoneGreenBarDrawed = False
 PonePointerX = ScreenWidth*0.25
 PtwoPointerX = ScreenWidth*0.75
 
 PonePoint = Pointer(PonePointerX)
 PtwoPoint = Pointer(PtwoPointerX)
 PoneRedBar = RedBar()
+
+PoneGreenBar = GreenBar()
 
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
@@ -521,14 +545,14 @@ while IsRunning:
 
     if Game2:
         win.fill(MainPurple)
-        pygame.display.set_caption("Arda en Nieks reetro Arkade: gunter")  # Zet de caption met het huidige spel
+        pygame.display.set_caption("Arda en Nieks reetro Arkade: g oenter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
         pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een Zwarte lijn
 
-        """ Volgorde
+        """ Volgorde:
         background
         lijn voor onderscheid
         Gray bar/area voor de players
@@ -538,9 +562,9 @@ while IsRunning:
         Gele Bar
         Pointer
         """
-        Barz = White
-        pygame.draw.rect(win, Barz, (ScreenWidth*(1/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
-        pygame.draw.rect(win, Barz, (ScreenWidth*(5/8), ScreenHeight*(3/4), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
+        Barz = (255, 140, 140)
+        pygame.draw.rect(win, Barz, (ScreenWidth*(1/8), ScreenHeight*(7/8), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
+        pygame.draw.rect(win, Barz, (ScreenWidth*(5/8), ScreenHeight*(7/8), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
 
 
 
@@ -564,23 +588,45 @@ while IsRunning:
 
             if GameStarted:
 
-                if PonePoint.rect.x > ScreenWidth*(3/8)-10:
+                if PonePoint.rect.x > ScreenWidth*(3/8)-10:     # Heen en weer gaan van de PonePointer
                     PonePointerSpeed *= -1
                 elif PonePoint.rect.x < ScreenWidth*(1/8)+5:
                     PonePointerSpeed *= -1
 
-                eee = random.randint(ScreenWidth*(1/8), ScreenWidth*(3/8))
 
+                """
+                20 stappen
+                elk stap is een deel van het scherm/pixels
+                Groen = 1 stap
+                Rood = -2 stap
+                Roze = -1 stap
+                Ultiem Rood = -5
+                """
                 PonePoint.move(PonePointerSpeed)        # Beweeg de PonePointer
-                # if PonePoint.rect.colliderect(PoneRedBar.rect):       # Check of de Pointer collide met de RedBar
-                #     # Straf Pone
 
                 # if PonePoint.rect.colliderect() and PonePressed:      # Check of het collide met het Groene stuk
                 #     print("e")
-                if not PoneRedBarDrawed:
-                    PoneRedBar.SetSize(60, eee)
+
+                PoneRedRandSize = random.randint(ScreenWidth*(1/60), ScreenWidth*(1/10))
+                PoneRedRandPos = random.randint(0, ScreenWidth*(2/8)-PoneRedRandSize)
+                if not PoneRedBarDrawed:        # Een debounce om het maar een keer een random positie te geven
+                    # PoneGreenBar.SetSize(60)
+                    PoneRedBar.SetSize(PoneRedRandSize, PoneRedRandPos)
                     PoneRedBarDrawed = True
+
+                if not PoneGreenBarDrawed:
+
+                    PoneGreenBar.SetSize(15, PoneRedRandPos)
+                    PoneGreenBarDrawed = True
+
+                if PonePoint.rect.colliderect(PoneRedBar.rect) and not PoneRedBarCollided:       # Check of de Pointer collide met de RedBar
+                    # print("collided", PoneRedBar.rect.width)
+                    PoneRedBarCollided = True
+                elif not PonePoint.rect.colliderect(PoneRedBar.rect):
+                    PoneRedBarCollided = False
                 win.blit(PoneRedBar.image, PoneRedBar.rect)     # Draw de RedBar
+                win.blit(PoneGreenBar.image, PoneGreenBar.rect)     # Draw de GreenBar
+
                 win.blit(PonePoint.image, PonePoint.rect)       # Draw de Pointer voor Hamudt
                 win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
 

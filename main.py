@@ -896,7 +896,7 @@ while IsRunning:
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
 
     if Game2:
-         win.fill(MainPurple)
+        win.fill(MainPurple)
         pygame.display.set_caption("Arda en Nieks reetro Arkade: g oenter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt

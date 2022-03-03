@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time
 
 pygame.init()
 pygame.mixer.init()
@@ -169,6 +170,326 @@ PtwoPoint = Pointer(PtwoPointerX)
 PoneRedBar = RedBar()
 
 PoneGreenBar = GreenBar()
+# -----------------De volgende Variables zijn voor Game3-----------------
+
+
+# classes
+
+class PongBar:
+    def __init__(self, locationx, locationy, ):
+        self.image = pygame.Surface((20, 200))
+        self.image.fill((255, 255, 255))
+        self.rect = self.image.get_rect()
+        self.rect.x = locationx
+        self.rect.y = locationy
+
+    def move(self, speed):
+        self.rect.y -= speed
+
+
+class Ball:
+    def __init__(self, locationx, locationy, size):
+        self.image = pygame.Surface((size, size))
+        self.image.fill((255, 255, 255))
+        self.rect = self.image.get_rect()
+        self.rect.x = locationx
+        self.rect.y = locationy
+
+    def move(self, xspeed, yspeed):
+        self.rect.x += xspeed
+        self.rect.y -= yspeed
+
+    def teleport(self, locationx, locationy):
+        self.rect.x = locationx
+        self.rect.y = locationy
+
+
+class Portal:
+    def __init__(self, locationx, locationy, colour, xsize, ysize):
+        self.image = pygame.Surface((xsize, ysize))
+        self.image.fill(colour)
+        self.rect = self.image.get_rect()
+        self.rect.x = locationx
+        self.rect.y = locationy
+
+    def reset(self):
+        self.rect.x = -2000
+        self.rect.y = -2000
+
+
+class powerup:
+    def __init__(self, locationx, locationy):
+        self.image = pygame.Surface((60, 60))
+        self.image.fill((255, 0, 255))
+        self.rect = self.image.get_rect()
+        self.rect.x = locationx
+        self.rect.y = locationy
+
+
+Player1 = PongBar((ScreenWidth / 10), 200)
+Player2 = PongBar(((ScreenWidth / 10) * 9), 200)
+ball0 = Ball(ScreenWidth / 2, random.randint(1, ScreenHeight - 21), 20)
+balllist = [ball0]
+yspeedlist = [10]
+xspeedlist = [10]
+Leftballlist = [False]
+Upballlist = [True]
+Hportals = False
+Vportals = False
+Hteleported = False
+Vteleported = False
+i = 0
+barrierUp = pygame.Rect(0, -10, ScreenWidth, 10)
+barrierDown = pygame.Rect(0, ScreenHeight, ScreenWidth, 10)
+secs = 0
+powerdUp = False
+#--------------------------- Game 4 Variables -------------------------
+Universalspeed = 10
+flowdirection = -40
+F = 1
+flowdirection1 = 40
+F1= -1
+flownum = 0
+flownum1 = 0
+flow = "left"
+flow1 = "right"
+bridge1x = 400
+bridgex = 800
+C = 255
+HenkLife = True
+PietLife = True
+deathbarrier = pygame.Rect(0, 0, 50, 700)
+deathbarrier1 = pygame.Rect(1155, 0, 100, 700)
+player1 = "Runner"
+cosnumber = 0
+cosN = 1
+Missilespeed = 0
+Missile = pygame.transform.scale(pygame.image.load("Sprites/missile.png"), (32, 64))
+Killer = pygame.transform.scale(pygame.image.load("Sprites/KillerFish.png"), (74, 114))
+Eduardoplane = pygame.transform.scale(pygame.image.load("Sprites/EduardoPlane.png"), (75, 75))
+Hamudplane = pygame.transform.scale(pygame.image.load("Sprites/HamudtPlane.png"), (75, 75))
+Chaserimage = Eduardoplane
+Hamudroller = pygame.transform.scale(pygame.image.load("Sprites/Hamudroller.png"), (75, 75))
+Eduardoroller = pygame.transform.scale(pygame.image.load("Sprites/eduardoroller.png"), (50, 75))
+Runnerimage = Hamudroller
+brug = pygame.transform.scale(pygame.image.load("Sprites/brug.png"), (150, 139))
+gameover = False
+Henkwins = False
+Pietwins = False
+
+class bullet:
+   def __init__(self, Xbullet, Ybullet, image):
+       self.image = image
+       self.rect = self.image.get_rect()
+       self.rect.x = Xbullet
+       self.rect.y = Ybullet
+
+   def move(self, yspeed, xspeed):
+       self.rect.y -= yspeed
+       self.rect.x += xspeed
+class Runner:
+   def __init__(self, Playerx, Playery, image):
+       self.image = image
+       self.rect = self.image.get_rect()
+       self.rect.x = Playerx
+       self.rect.y = Playery
+
+   def move(self, Movex, Movey):
+       self.rect.x += Movex
+       self.rect.y += Movey
+
+class Chaser:
+   def __init__(self, Chaserx, Chasery, image):
+       self.image = image
+       self.rect = self.image.get_rect()
+       self.rect.x = Chaserx
+       self.rect.y = Chasery
+
+   def move(self, Chaserspeed):
+       self.rect.x += Chaserspeed
+
+class River:
+   def __init__(self, Riverx, Rivery):
+       self.image = pygame.Surface((1500, 125))
+       self.image.fill((0, 50, 255))
+       self.rect = self.image.get_rect()
+       self.rect.x = Riverx
+       self.rect.y = Rivery
+
+   def down(self, fallspeed):
+       self.rect.y += fallspeed
+
+class Bridge:
+    def __init__(self, bridgenumber, rivernumber):
+        self.image = brug
+        self.rect = self.image.get_rect()
+        self.rect.x = bridgenumber
+        self.rect.y = rivernumber-10
+
+    def move(self, Movex, Movey):
+       self.rect.x += Movex
+       self.rect.y += Movey
+
+
+
+def randomplayer():
+    R = random.randint(1,2)
+    global player1
+    global Chaserimage
+    global Runnerimage
+    if R == 1:
+        player1 = "Chaser"
+        Chaserimage = Hamudplane
+        Runnerimage = Eduardoroller
+    else:
+        player1 = "Runner"
+        Chaserimage = Eduardoplane
+        Runnerimage = Hamudroller
+def flowrandom():
+    flownum = random.randint(1, 2)
+    global flowdirection
+    global flow
+    global F
+    if flownum == 1:
+        flowdirection = -40
+        flow = "left"
+        F = 1
+    else:
+        flowdirection = 40
+        flow = "right"
+        F = -1
+def flowrandom1():
+    flownum1 = random.randint(1, 2)
+    global flowdirection1
+    global flow1
+    global F1
+    if flownum1 == 1:
+        flowdirection1 = -40
+        flow1 = "left"
+        F1 = 1
+    else:
+        flowdirection1 = 40
+        flow1 = "right"
+        F1 = -1
+
+def setbridge1x():
+    global bridge1x
+    global bridge1
+    if flow1 == "left":
+        bridge1x = random.randint(300, 800)
+    if flow1 == "right":
+        bridge1x = random.randint(100, 500)
+    bridge1 = Bridge(bridge1x, river1.rect.y)
+def setbridgex():
+    global bridgex
+    global bridge2
+    if flow == "left":
+        bridgex = random.randint(300, 800)
+    if flow == "right":
+        bridgex = random.randint(100, 500)
+    bridge2 = Bridge(bridgex, river2.rect.y)
+
+def shoot():
+    global Bulletis
+    global Bullet
+    global Missilespeed
+    global SPED
+    if Bulletis:
+        if Bullet.rect.y < -17000:
+            Bullet.rect.x = piet.rect.x + 20
+            Bullet.rect.y = piet.rect.y + 10
+            Missilespeed = 0
+            SPED = -2
+    else:
+        Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
+        Bulletis = True
+        Missilespeed = 0
+        SPED = -2
+
+
+def shoot2():
+    global airbombis
+    global KillerFish
+    if airbombis:
+        if KillerFish.rect.y > 700:
+            KillerFish.rect.x = henk.rect.x + 33
+            KillerFish.rect.y = henk.rect.y + 60
+    else:
+        KillerFish = bullet(henk.rect.x + 50, henk.rect.y + 25, Killer)
+        airbombis = True
+randomplayer()
+singleflow = 0
+Flowright = False
+henk = Runner(600, 200, Runnerimage)
+piet = Chaser(600, 600, Chaserimage)
+river1 = River(0, 300)
+river2 = River(0, -200)
+bridge1 = Bridge(bridge1x, river1.rect.y)
+bridge2 = Bridge(bridgex, river2.rect.y)
+Bulletis = False
+airbombis = False
+Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
+KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
+SPED = -4
+#------------------------------------------Game 5--------------------------------
+
+Sgamestart = False
+Sgamestarttimer = 0
+Startsumotimer = False
+Sload1 = pygame.image.load("Sprites/1.png")
+Sload1 = pygame.transform.scale(Sload1, (100, 100))
+Sload2 = pygame.image.load("Sprites/2.png")
+Sload2 = pygame.transform.scale(Sload2, (100, 100))
+Sload3 = pygame.image.load("Sprites/3.png")
+Sload3 = pygame.transform.scale(Sload3, (100, 100))
+Sfont = pygame.font.Font("freesansbold.ttf", 50)
+Stext = Sfont.render("Press the Spacebar to start!", True, (225,225,225), (0,0,0))
+Stextrect = Stext.get_rect()
+Stextrect.center = (600, 150)
+# player variables
+Splayer1 = 1
+Splayer2 = 1
+Splayer1live = True
+Splayer2live = True
+Splayer1x = 200
+Splayer1y = 275
+Splayer2x = 900
+Splayer2y = 275
+Splayer1rect = pygame.Rect(200, 275, 100, 100)
+Splayer2rect = pygame.Rect(900, 275, 100, 100)
+SPlayer1image = pygame.image.load("Sprites/SumoH.png")
+SPlayer1image = pygame.transform.scale(SPlayer1image, (105, 105))
+SPlayer2image = pygame.image.load("Sprites/SumoE.png")
+SPlayer2image = pygame.transform.scale(SPlayer2image, (105, 105))
+Stextwin1 = Sfont.render("Player 1 wins", True, (225,225,225), (0,0,0))
+Stextrectwin1 = Stextwin1.get_rect()
+Stextrectwin1.center = (600, 150)
+Stextwin2 = Sfont.render("Player 2 wins", True, (225,225,225), (0,0,0))
+Stextrectwin2 = Stextwin2.get_rect()
+Stextrectwin2.center = (600, 150)
+# power push
+Sumorantimer = 0
+Stime = 0
+Srandomdirection = 0
+Sdownarrow = pygame.image.load("Sprites/downarrow.png")
+Sdownarrow = pygame.transform.scale(Sdownarrow, (100, 100))
+Sleftarrow = pygame.image.load("Sprites/leftarrow.png")
+Sleftarrow = pygame.transform.scale(Sleftarrow, (100, 100))
+Srightarrow = pygame.image.load("Sprites/rightarrow.png")
+Srightarrow = pygame.transform.scale(Srightarrow, (100, 100))
+Skeyassigned = "no"
+S1 = 0
+Sp1F = 0
+Sp2F = 0
+# essential stuff
+deathbarrect = pygame.Rect(1100, 0, 10, 1000)
+deathbarrect1 = pygame.Rect(100, 0, 10, 1000)
+win = pygame.display.set_mode((1200, 700))
+Sumogamedone = False
+SS = 0
+pygame.display.set_caption("sumoprot")
+gavescoreScoreplayer2 = False
+gavescoreScoreplayer1 = False
 
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
@@ -182,6 +503,7 @@ while IsRunning:
         MouseX = pygame.mouse.get_pos()[0]
         MouseY = pygame.mouse.get_pos()[1]
         MouseRect.move_ip(MouseX, MouseY)
+
 
         if Game1:
             if event.type == pygame.KEYUP:
@@ -219,6 +541,22 @@ while IsRunning:
                     pygame.draw.rect(win, PtwoGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     pygame.draw.rect(win, PtwoYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     PtwoReady = True
+        if Game5:
+            if Sgamestart:
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_w and Splayer1live and Splayer2live:
+                        Splayer1x += 20
+                        Splayer1rect.move_ip(20, 0)
+                        if Splayer1rect.colliderect(Splayer2rect):
+                            Splayer2x += 20
+                            Splayer2rect.move_ip(20, 0)
+                if event.type == pygame.KEYUP and Splayer2live and Splayer1live:
+                    if event.key == pygame.K_UP:
+                        Splayer2x -= 20
+                        Splayer2rect.move_ip(-20, 0)
+                        if Splayer2rect.colliderect(Splayer1rect):
+                            Splayer1x -= 20
+                            Splayer1rect.move_ip(-20, 0)
 
     def loading(val):
         for y in range(1, LoadingTime):
@@ -631,13 +969,562 @@ while IsRunning:
                 win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
 
     if Game3:
-        win.fill(DarkPurple)
+        pygame.display.set_caption("penis")
+        # variables bars
+        movespeedP2 = 10
+        movespeedP1 = 10
+        Player1score = 0
+        Player2score = 0
+
+
+
+        def TruOrFal(list):
+            i = random.randint(1, 2)
+            if i > 1:
+                i = True
+            else:
+                i = False
+            list.append(i)
+
+
+        # makes new horizontal portals
+        def new_V_portals():
+            global portalC
+            global portalD
+            global teleportC
+            global teleportD
+            global Vportals
+            global Vteleported
+            T = random.randint(0, ScreenHeight - 200)
+            U = random.randint(int(ScreenWidth / 10 + 20), int(ScreenWidth / 10) * 9 - 20)
+            portalC = Portal(U, T, (0, 255, 0), 10, 200)
+            teleportC = [U, T + 100]
+            E = random.randint(0, ScreenHeight - 200)
+            O = random.randint(int(ScreenWidth / 10 + 20), int(ScreenWidth / 10) * 9 - 20)
+            portalD = Portal(O, E, (0, 0, 255), 10, 200)
+            teleportD = [O, E + 100]
+            Vportals = True
+            Vteleported = False
+
+
+        def new_H_portals():
+            global portalA
+            global portalB
+            global teleportA
+            global teleportB
+            global Hportals
+            global Hteleported
+            global isbottomA
+            global isbottomB
+            # decides if its on the bottom or top
+            i = random.randint(1, 2)
+            if i == 1:
+                T = ScreenHeight - 10
+                isbottomA = 1
+            else:
+                T = 0
+                isbottomA = 0
+            U = random.randint(int(ScreenWidth / 10), int(ScreenWidth / 10) * 9 - 200)
+            portalA = Portal(U, T, (0, 0, 255), 200, 10)
+            teleportA = [U + 100, T]
+            R = random.randint(1, 2)
+            if R == 1:
+                E = ScreenHeight - 10
+                isbottomB = 1
+            else:
+                E = 0
+                isbottomB = 0
+            O = random.randint(int(ScreenWidth / 10), int(ScreenWidth / 10) * 9 - 200)
+            portalB = Portal(O, E, (255, 150, 0), 200, 10)
+            teleportB = [O + 100, E]
+            Hportals = True
+            Hteleported = False
+
+
+        def restart():
+            global Player1
+            global Player2
+            global balllist
+            global yspeedlist
+            global xspeedlist
+            global Leftballlist
+            global Upballlist
+            global Hportals
+            global Vportals
+            global portalA
+            global portalB
+            global portalC
+            global portalD
+            global Hteleported
+            global Vteleported
+            global i
+            global secs
+            global powerdUp
+            Player1 = PongBar((ScreenWidth / 10), 200)
+            Player2 = PongBar(((ScreenWidth / 10) * 9), 200)
+            ball0 = Ball(ScreenWidth / 2, random.randint(1, ScreenHeight - 21), 20)
+            balllist = [ball0]
+            yspeedlist = [10]
+            xspeedlist = [10]
+            Leftballlist = [False]
+            Upballlist = [True]
+            TruOrFal(Leftballlist)
+            TruOrFal(Upballlist)
+            if Hportals:
+                portalA.reset()
+                portalB.reset()
+                Hportals = False
+            if Vportals:
+                portalC.reset()
+                portalD.reset()
+                Vportals = False
+            Hteleported = False
+            Vteleported = False
+            i = 0
+            secs = 0
+            powerdUp = False
+
+
+        def addball():
+            global i
+            i += 1
+            size = random.randint(1, 60)
+            ball = Ball((ScreenWidth / 2), random.randint(1, ScreenHeight - (size + 1)), size)
+            TruOrFal(Leftballlist)
+            TruOrFal(Upballlist)
+            if Upballlist[i]:
+                yspeed = random.randint(-20, -1)
+            else:
+                yspeed = random.randint(1, 20)
+            if Leftballlist[i]:
+                xspeed = random.randint(-20, -1)
+            else:
+                xspeed = random.randint(1, 20)
+            yspeedlist.append(yspeed)
+            xspeedlist.append(xspeed)
+            balllist.append(ball)
+
+
+
+        # DA GAME
+        win.fill((0, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # controls
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w] and not Player1.rect.y < 0:
+            Player1.move(movespeedP1)
+        if keys[pygame.K_s] and not Player1.rect.y > (ScreenHeight - 200):
+            Player1.move(-movespeedP1)
+        if keys[pygame.K_UP] and not Player2.rect.y < 0:
+            Player2.move(movespeedP2)
+        if keys[pygame.K_DOWN] and not Player2.rect.y > (ScreenHeight - 200):
+            Player2.move(-movespeedP2)
+
+        # ball
+        for u in range(len(balllist)):
+            if balllist[u].rect.colliderect(barrierUp) or balllist[u].rect.colliderect(barrierDown):
+                yspeedlist[u] *= -1
+            if balllist[u].rect.colliderect(Player1) and Leftballlist[u]:
+                xspeedlist[u] *= -1
+                Leftballlist[u] = False
+            if balllist[u].rect.colliderect(Player2) and not Leftballlist[u]:
+                xspeedlist[u] *= -1
+                Leftballlist[u] = True
+            if balllist[u].rect.x < 0:
+                ScorePtwo += 1
+                time.sleep(0.5)
+                restart()
+                break
+            if balllist[u].rect.x > ScreenWidth - balllist[u].rect.width:
+                ScorePone += 1
+                time.sleep(0.5)
+                restart()
+                break
+            if Hportals:
+                if balllist[u].rect.colliderect(portalA) and not Hteleported:
+                    balllist[u].teleport(teleportB[0], teleportB[1] + balllist[u].rect.height * isbottomB)
+                    Hportals = False
+                    Hteleported = True
+                    portalA.reset()
+                    portalB.reset()
+                if balllist[u].rect.colliderect(portalB) and not Hteleported:
+                    balllist[u].teleport(teleportA[0], teleportA[1] + balllist[u].rect.height * isbottomA)
+                    Hportals = False
+                    Hteleported = True
+                    portalB.reset()
+                    portalA.reset()
+            if Vportals:
+                if balllist[u].rect.colliderect(portalC) and not Vteleported:
+                    balllist[u].teleport(teleportD[0], teleportD[1])
+                    Vportals = False
+                    Vteleported = True
+                    portalC.reset()
+                    portalD.reset()
+                if balllist[u].rect.colliderect(portalD) and not Vteleported:
+                    balllist[u].teleport(teleportC[0], teleportC[1])
+                    Vportals = False
+                    Vteleported = True
+                    portalD.reset()
+                    portalC.reset()
+            if powerdUp:
+                if balllist[u].rect.colliderect(power):
+                    power.rect.x = - 200
+                    power.rect.y = - 200
+                    P = random.randint(1, 3)
+                    if P == 1:
+                        addball()
+                    elif P == 2:
+                        new_H_portals()
+                    else:
+                        new_V_portals()
+                    powerdUp = False
+            balllist[u].move(xspeedlist[u], yspeedlist[u])
+            win.blit(balllist[u].image, balllist[u].rect)
+        # Powerups
+        secs += 1
+        if secs == 33:
+            if not powerdUp:
+                G = random.randint(1, 4)
+                if G == 4:
+                    x = random.randint((ScreenWidth / 10 + 60), (ScreenWidth / 10) * 9 - 60)
+                    y = random.randint(10, ScreenHeight - 70)
+                    power = powerup(x, y)
+                    powerdUp = True
+            secs = 0
+        # draw
+        if powerdUp:
+            win.blit(power.image, power.rect)
+        if Vportals:
+            win.blit(portalC.image, portalC.rect)
+            win.blit(portalD.image, portalD.rect)
+        if Hportals:
+            win.blit(portalA.image, portalA.rect)
+            win.blit(portalB.image, portalB.rect)
+        win.blit(Player2.image, Player2.rect)
+        win.blit(Player1.image, Player1.rect)
+        pygame.display.update()
+
+   #     --------------------------------------- GAME 4 ----------------------------------------
 
     if Game4:
-        win.fill(LightPurple)
+        win.fill((59, 186, 24))
+        pygame.display.set_caption("Henk en Piet 2.0")
+        # drawing time
+        win.blit(river1.image, river1.rect)
+        win.blit(river2.image, river2.rect)
+        win.blit(bridge1.image, bridge1.rect)
+        win.blit(bridge2.image, bridge2.rect)
+        pygame.draw.rect(win, (0, 50, 255), (0, 0, 100, 700))
+        pygame.draw.rect(win, (0, 50, 255), (1105, 0, 100, 700))
+        if Bulletis:
+            win.blit(Bullet.image, Bullet.rect)
+        if airbombis:
+            win.blit(KillerFish.image, KillerFish.rect)
+        win.blit(piet.image, piet.rect)
+        win.blit(henk.image, henk.rect)
+        pygame.display.update()
+        if CountDown:
+            if CountDownAmount == 1:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img1, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+                CountDownAmount = 4
+                CountDown = False
+            if CountDownAmount == 2:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img2, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            if CountDownAmount == 3:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img3, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            CountDownAmount -= 1
+            pygame.display.update()
+            pygame.time.delay(500)
+
+        else:
+            if GameStarted:
+                # player 1 movement
+                press = pygame.key.get_pressed()
+                if player1 == "Runner":
+                    if press[pygame.K_s]:
+                        henk.move(0, 15)
+                    if press[pygame.K_d]:
+                        henk.move(15, 0)
+                    if press[pygame.K_w]:
+                        henk.move(0, -15)
+                    if press[pygame.K_a]:
+                        henk.move(-15, 0)
+                    # player 2 movement
+                    if press[pygame.K_LEFT] and piet.rect.x > 100:
+                        piet.move(-10)
+                    if press[pygame.K_RIGHT] and piet.rect.x <= 1020:
+                        piet.move(10)
+                else:
+                    if press[pygame.K_a] and piet.rect.x > 100:
+                        piet.move(-10)
+                    if press[pygame.K_d] and piet.rect.x <= 1020:
+                        piet.move(10)
+                    # player 2 movement
+                    if press[pygame.K_DOWN]:
+                        henk.move(0, 15)
+                    if press[pygame.K_RIGHT]:
+                        henk.move(15, 0)
+                    if press[pygame.K_UP]:
+                        henk.move(0, -15)
+                    if press[pygame.K_LEFT]:
+                        henk.move(-15, 0)
+                if henk.rect.y < 0:
+                    henk.move(0, 15)
+                # gun and barrels
+                if player1 == "Runner":
+                    if press[pygame.K_RCTRL]:
+                        shoot()
+                    if press[pygame.K_SPACE]:
+                        shoot2()
+                else:
+                    if press[pygame.K_SPACE]:
+                        shoot()
+                    if press[pygame.K_RCTRL]:
+                        shoot2()
+                if Bulletis:
+                    Bullet.move(Missilespeed, 0)
+                    Missilespeed = Missilespeed + SPED
+                    SPED += 1
+                if airbombis:
+                    KillerFish.move(-5, cosnumber)
+                    cosnumber -= cosN
+                    if cosnumber == 16 or cosnumber == -16:
+                        cosN *= -1
+
+                # bridgemovement n stuffs
+
+                if flow1 == "left":
+                    bridge1x -= 5
+                    bridge1.move(-5, 0)
+                if flow1 == "right":
+                    bridge1x += 5
+                    bridge1.move(5, 0)
+                if flow == "left":
+                    bridgex -= 5
+                    bridge2.move(-5, 0)
+                if flow == "right":
+                    bridgex += 5
+                    bridge2.move(5, 0)
+
+                if henk.rect.colliderect(bridge1):
+                    henk.move(flowdirection1 + 35 * F1, Universalspeed)
+                if henk.rect.colliderect(bridge2):
+                    henk.move(flowdirection + 35 * F, Universalspeed)
+
+                # rivermovemet and directions
+                if river1.rect.y < 700:
+                    if henk.rect.colliderect(river1) and not henk.rect.colliderect(bridge1):
+                        henk.move(flowdirection1, 0)
+                    if river1.rect.y == 690:
+                        river1.down(-1000)
+                        bridge1.move(0, -1000)
+                    bridge1.move(0, Universalspeed)
+                    river1.down(Universalspeed)
+
+                if river1.rect.y <= -150:
+                    flowrandom1()
+                    setbridge1x()
+
+                if river2.rect.y < 700:
+                    if henk.rect.colliderect(river2) and not henk.rect.colliderect(bridge2):
+                        henk.move(flowdirection, 0)
+                    if river2.rect.y == 690:
+                        river2.down(-1000)
+                        bridge2.move(0, -1000)
+                    bridge2.move(0, Universalspeed)
+                    river2.down(Universalspeed)
+
+                if river2.rect.y <= -150:
+                    flowrandom()
+                    setbridgex()
+                # henk gets hit
+                if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(
+                        deathbarrier1) or henk.rect.y >= 650 or henk.rect.colliderect(Bullet):
+                    HenkLife = False
+                    Pietwins = True
+                # piet gets hit
+                if piet.rect.colliderect(KillerFish):
+                    PietLife = False
+                    Henkwins = True
+                # game over
+                if not HenkLife or not PietLife:
+                    gameover = True
+                if gameover:
+                    Universalspeed = 0
+
+                    if Henkwins:
+                        piet.move(1000)
+                    else:
+                        C = 0
+
+
+
 
     if Game5:
-        win.fill(Pink)
+        win.fill((10, 10, 255))
+        Sumostartkey = pygame.key.get_pressed()  # Power push
+        if Sgamestart and Splayer1live and Splayer2live:
+            Stime += 1
+            Srandom = random.randint(10, 50)
+            if Stime == 33:
+                Sumorantimer += Srandom
+                Stime = 0
+            if Sumorantimer >= 100:
+                S1 += 1
+                if S1 == 1:
+                    Srandomdirection = random.randint(1, 3)
+                if Srandomdirection == 1:
+                    Skeyassigned = "down"
+                    win.blit(Sdownarrow, (575, 200))
+                if Srandomdirection == 2:
+                    Skeyassigned = "left"
+                    win.blit(Sleftarrow, (566, 200))
+                if Srandomdirection == 3:
+                    Skeyassigned = "right"
+                    win.blit(Srightarrow, (567, 200))
+                if Sumostartkey[pygame.K_s] and Skeyassigned == "down":
+                    Splayer2x += 80
+                    Splayer1x += 80
+                    Splayer2rect.move_ip(80, 0)
+                    Splayer1rect.move_ip(80, 0)
+                    Sumorantimer = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                    S1 = 0
+                if Sp1F < 1:
+                    if Skeyassigned == "down" and Sumostartkey[pygame.K_a] or Sumostartkey[pygame.K_d]:
+                        Splayer1x -= 60
+                        Splayer1rect.move_ip(-60, 0)
+                        Sp1F += 1
+                if Sumostartkey[pygame.K_DOWN] and Skeyassigned == "down":
+                    Splayer2x -= 80
+                    Splayer1x -= 80
+                    Splayer2rect.move_ip(-80, 0)
+                    Splayer1rect.move_ip(-80, 0)
+                    Sumorantimer = 0
+                    S1 = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                if Sp2F < 1:
+                    if Skeyassigned == "down" and Sumostartkey[pygame.K_LEFT] or Sumostartkey[pygame.K_RIGHT]:
+                        Splayer2x += 60
+                        Splayer2rect.move_ip(60, 0)
+                        Sp2F += 1
+                if Sumostartkey[pygame.K_a] and Skeyassigned == "left":
+                    Splayer2x += 80
+                    Splayer1x += 80
+                    Splayer2rect.move_ip(80, 0)
+                    Splayer1rect.move_ip(80, 0)
+                    Sumorantimer = 0
+                    S1 = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                if Sp1F < 1:
+                    if Skeyassigned == "left" and Sumostartkey[pygame.K_s] or Sumostartkey[pygame.K_d]:
+                        Splayer1x -= 60
+                        Splayer1rect.move_ip(-60, 0)
+                        Sp1F += 1
+                if Sumostartkey[pygame.K_LEFT] and Skeyassigned == "left":
+                    Splayer2x -= 80
+                    Splayer1x -= 80
+                    Splayer2rect.move_ip(-80, 0)
+                    Splayer1rect.move_ip(-80, 0)
+                    Sumorantimer = 0
+                    S1 = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                if Sp2F < 1:
+                    if Skeyassigned == "left" and Sumostartkey[pygame.K_DOWN] or Sumostartkey[pygame.K_RIGHT]:
+                        Splayer2x += 60
+                        Splayer2rect.move_ip(60, 0)
+                        Sp2F += 1
+                if Sumostartkey[pygame.K_d] and Skeyassigned == "right":
+                    Splayer2x += 80
+                    Splayer1x += 80
+                    Splayer2rect.move_ip(60, 0)
+                    Splayer1rect.move_ip(60, 0)
+                    Sumorantimer = 0
+                    S1 = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                if Sp1F < 1:
+                    if Skeyassigned == "right" and Sumostartkey[pygame.K_a] or Sumostartkey[pygame.K_s]:
+                        Splayer1x -= 60
+                        Splayer1rect.move_ip(-60, 0)
+                        Sp1F += 1
+                if Sumostartkey[pygame.K_RIGHT] and Skeyassigned == "right":
+                    Splayer2x -= 80
+                    Splayer1x -= 80
+                    Splayer2rect.move_ip(-80, 0)
+                    Splayer1rect.move_ip(-80, 0)
+                    Sumorantimer = 0
+                    S1 = 0
+                    Sp1F = 0
+                    Sp2F = 0
+                if Sp2F < 1:
+                    if Skeyassigned == "right" and Sumostartkey[pygame.K_DOWN] or Sumostartkey[pygame.K_LEFT]:
+                        Splayer2x += 60
+                        Splayer2rect.move_ip(60, 0)
+                        Sp2F += 1
+
+        # Start timer
+        if not Sgamestart:
+            if not Startsumotimer:
+                win.blit(Stext, Stextrect)
+            if Sumostartkey[pygame.K_SPACE]:
+                Startsumotimer = True
+            if Startsumotimer:
+                Sgamestarttimer += 1
+                if 0 < Sgamestarttimer < 15:
+                    win.blit(Sload3, (550, 200))
+                if 15 < Sgamestarttimer < 30:
+                    win.blit(Sload2, (550, 200))
+                if 30 < Sgamestarttimer <= 45:
+                    win.blit(Sload1, (550, 200))
+            if Sgamestarttimer > 45:
+                Sgamestarttimer = 0
+                Startsumotimer = False
+                Sgamestart = True
+        pygame.draw.rect(win, (161, 96, 6), (150, 375, 900, 100))
+        pygame.draw.rect(win, (161, 96, 6), (525, 375, 150, 1000))
+        if Splayer2rect.colliderect(deathbarrect):
+            Splayer2live = False
+            win.blit(Stextwin1, Stextrectwin1)
+            SS += 1
+            if not gavescoreScoreplayer1:
+                ScorePone += 1
+                gavescoreScoreplayer1 = True
+
+        else:
+            win.blit(SPlayer2image, (Splayer2x, Splayer2y))
+        if Splayer1rect.colliderect(deathbarrect1):
+            Splayer1live = False
+            win.blit(Stextwin2, Stextrectwin2)
+            SS += 1
+            if not gavescoreScoreplayer2:
+                ScorePtwo += 1
+                gavescoreScoreplayer2 = True
+        if SS == 33:
+            Splayer2x = 900
+            Splayer1x = 200
+            Splayer1rect = pygame.Rect(200, 275, 100, 100)
+            Splayer2rect = pygame.Rect(900, 275, 100, 100)
+            Splayer1live = True
+            Splayer2live = True
+            SS = 0
+            Sgamestart = False
+            gavescoreScoreplayer2 = False
+            gavescoreScoreplayer1 = False
+        else:
+            win.blit(SPlayer1image, (Splayer1x, Splayer1y))
+
+        pygame.display.update()
 
     if Game6:
         win.fill(Yellow)
@@ -652,3 +1539,4 @@ while IsRunning:
 
     pygame.display.update()
 pygame.quit()
+

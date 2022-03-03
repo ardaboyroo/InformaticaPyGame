@@ -31,9 +31,9 @@ Red = (255, 0, 60)
 Yellow = (255, 225, 0)
 
 # De volgende Variables zijn de bool values voor de games
-Game1 = False       # Simon Says
-Game2 = False       # Sumo
-Game3 = False
+Game1 = False       # Simone Zegt
+Game2 = False       # Gunter
+Game3 = False       # 
 Game4 = False
 Game5 = False
 Game6 = False
@@ -150,7 +150,7 @@ class GreenBar:
 
     def SetSize(self, GreenBarSize, GreenBarPos):
         # self.image = pygame.Surface((5, 20))
-        self.image = pygame.Surface((GreenBarSize, 20))
+        self.image = pygame.Surface((PoneRedBar.image.get_width()/3, 20))
         self.image.fill(Green)
         self.rect = self.image.get_rect()
         self.rect.y = ScreenHeight*(7/8)
@@ -164,6 +164,7 @@ PoneRedBarDrawed = False
 PoneGreenBarDrawed = False
 PonePointerX = ScreenWidth*0.25
 PtwoPointerX = ScreenWidth*0.75
+PoneStep = 0        # Dit is de "stappenteller" met een maximaal van 20
 
 PonePoint = Pointer(PonePointerX)
 PtwoPoint = Pointer(PtwoPointerX)
@@ -243,7 +244,7 @@ barrierUp = pygame.Rect(0, -10, ScreenWidth, 10)
 barrierDown = pygame.Rect(0, ScreenHeight, ScreenWidth, 10)
 secs = 0
 powerdUp = False
-#--------------------------- Game 4 Variables -------------------------
+# -----------------De volgende Variables zijn voor Game4-----------------
 Universalspeed = 10
 flowdirection = -40
 F = 1
@@ -431,7 +432,7 @@ airbombis = False
 Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
 KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
 SPED = -4
-#------------------------------------------Game 5--------------------------------
+# -----------------De volgende Variables zijn voor Game5-----------------
 
 Sgamestart = False
 Sgamestarttimer = 0
@@ -491,6 +492,8 @@ pygame.display.set_caption("sumoprot")
 gavescoreScoreplayer2 = False
 gavescoreScoreplayer1 = False
 
+# --------------------------------------------------------------------Main while loop-----------------------------------------------------------------------------------
+
 while IsRunning:
     pygame.time.delay(33)  # Framerate in 1/milliseconden
 
@@ -541,6 +544,17 @@ while IsRunning:
                     pygame.draw.rect(win, PtwoGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     pygame.draw.rect(win, PtwoYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     PtwoReady = True
+        
+        if Game2:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    # if not PonePressed:
+                    #     print("pp")
+                    PonePressed = True
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_w:
+                    PonePressed = False
+        
         if Game5:
             if Sgamestart:
                 if event.type == pygame.KEYUP:
@@ -882,12 +896,12 @@ while IsRunning:
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
 
     if Game2:
-        win.fill(MainPurple)
+         win.fill(MainPurple)
         pygame.display.set_caption("Arda en Nieks reetro Arkade: g oenter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC       # Achtergrond voor de score names
         win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth/16, ScreenHeight/16)))     # Draw de score van Hamudt
         win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth/1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
-
+        pygame.draw.rect(win, Black, (300, 500-PoneStep*20, 50, 50))
         pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een Zwarte lijn
 
         """ Volgorde:
@@ -903,7 +917,6 @@ while IsRunning:
         Barz = (255, 140, 140)
         pygame.draw.rect(win, Barz, (ScreenWidth*(1/8), ScreenHeight*(7/8), ScreenWidth*(1/4), 20))    # Outline voor Hamudt
         pygame.draw.rect(win, Barz, (ScreenWidth*(5/8), ScreenHeight*(7/8), ScreenWidth*(1/4), 20))    # Outline voor Eduardo
-
 
 
 
@@ -940,6 +953,7 @@ while IsRunning:
                 Roze = -1 stap
                 Ultiem Rood = -5
                 """
+
                 PonePoint.move(PonePointerSpeed)        # Beweeg de PonePointer
 
                 # if PonePoint.rect.colliderect() and PonePressed:      # Check of het collide met het Groene stuk
@@ -948,18 +962,25 @@ while IsRunning:
                 PoneRedRandSize = random.randint(ScreenWidth*(1/60), ScreenWidth*(1/10))
                 PoneRedRandPos = random.randint(0, ScreenWidth*(2/8)-PoneRedRandSize)
                 if not PoneRedBarDrawed:        # Een debounce om het maar een keer een random positie te geven
-                    # PoneGreenBar.SetSize(60)
                     PoneRedBar.SetSize(PoneRedRandSize, PoneRedRandPos)
                     PoneRedBarDrawed = True
 
-                if not PoneGreenBarDrawed:
-
+                if not PoneGreenBarDrawed:      # Een debounce om het maar een keer een random positie te geven
                     PoneGreenBar.SetSize(15, PoneRedRandPos)
                     PoneGreenBarDrawed = True
 
-                if PonePoint.rect.colliderect(PoneRedBar.rect) and not PoneRedBarCollided:       # Check of de Pointer collide met de RedBar
-                    # print("collided", PoneRedBar.rect.width)
+                if PonePoint.rect.colliderect(PoneGreenBar.rect) and not PoneRedBarCollided and PoneStep <= 20 and PonePressed:             # Check of de Pointer collide met de GreenBar
+                    print("GreenChanged")
+                    PonePressed = False
+                    PoneStep += 1
                     PoneRedBarCollided = True
+                if PonePoint.rect.colliderect(PoneRedBar.rect) and not PonePoint.rect.colliderect(PoneGreenBar.rect) and not PoneRedBarCollided and PonePressed:       # Checkt of de player alleen met de RedBar collide wanneer het klikt
+                    print("RedChanged")
+                    PonePressed = False
+                    if PoneStep - 2 < 0:
+                        PoneStep = 0
+                    else:
+                        PoneStep -= 2
                 elif not PonePoint.rect.colliderect(PoneRedBar.rect):
                     PoneRedBarCollided = False
                 win.blit(PoneRedBar.image, PoneRedBar.rect)     # Draw de RedBar
@@ -967,6 +988,7 @@ while IsRunning:
 
                 win.blit(PonePoint.image, PonePoint.rect)       # Draw de Pointer voor Hamudt
                 win.blit(PtwoPoint.image, PtwoPoint.rect)       # Draw de Pointer voor Eduardo
+
 
     if Game3:
         pygame.display.set_caption("penis")

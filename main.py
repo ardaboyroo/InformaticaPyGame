@@ -33,9 +33,9 @@ Yellow = (255, 225, 0)
 # De volgende Variables zijn de bool values voor de games
 Game1 = False  # Simone Zegt
 Game2 = False  # Gunter
-Game3 = False  #
-Game4 = False
-Game5 = False
+Game3 = False  # Pong
+Game4 = False  # Henk en Piet 2.0 (Turkish Version)
+Game5 = False  #
 Game6 = False
 
 # De volgende Variables zijn veelgebruikte Values
@@ -110,10 +110,6 @@ PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHold
 PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
 # -----------------De volgende Variables zijn voor Game2-----------------
-PonePointerSpeed = 10
-eee = 0
-
-
 class Pointer:
     def __init__(self, PointerX):
         self.image = pygame.Surface((5, 28))
@@ -148,30 +144,42 @@ class GreenBar:
         self.rect = self.image.get_rect()
         self.rect.y = ScreenHeight * (7 / 8)
 
-    def SetSize(self, GreenBarSize, GreenBarPos):
+    def SetSize(self, GreenBarPos, ID):
         # self.image = pygame.Surface((5, 20))
-        self.image = pygame.Surface((PoneRedBar.image.get_width() / 3, 20))
+        if ID == 1:
+            self.image = pygame.Surface((PoneRedBar.image.get_width() / 3, 20))
+        if ID == 2:
+            self.image = pygame.Surface((PtwoRedBar.image.get_width() / 3, 20))
         self.image.fill(Green)
         self.rect = self.image.get_rect()
         self.rect.y = ScreenHeight * (7 / 8)
-        self.rect.x = (PoneRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (
-                    self.image.get_width() / 2)
+        if ID == 1:
+            self.rect.x = (PoneRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (self.image.get_width() / 2)
+        if ID == 2:
+            self.rect.x = (PtwoRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (self.image.get_width() / 2)
 
-        # self.rect.x = PoneRedBar.image.get_width()/2
 
-
+PonePointerSpeed = 10
+PtwoPointerSpeed = 10
 PoneRedBarDrawed = False
 PoneGreenBarDrawed = False
+PtwoRedBarDrawed = False
+PtwoGreenBarDrawed = False
+PoneWin = False
+PtwoWin = False
+PoneWinTxt = MediumFont.render("Hamudt heeft gewonnen, Eduardo je moet echt beter worden gap", True, Black)
+PtwoWinTxt = MediumFont.render("Eduardo heeft gewonnen, Hamudt je moet echt beter worden gap", True, Black)
 PonePointerX = ScreenWidth * 0.25
 PtwoPointerX = ScreenWidth * 0.75
 PoneStep = 0  # Dit is de "stappenteller" met een maximaal van 20
+PtwoStep = 0  # Dit is de "stappenteller" met een maximaal van 20
 
 PonePoint = Pointer(PonePointerX)
 PtwoPoint = Pointer(PtwoPointerX)
 PoneRedBar = RedBar()
-
+PtwoRedBar = RedBar()
 PoneGreenBar = GreenBar()
-
+PtwoGreenBar = GreenBar()
 
 # -----------------De volgende Variables zijn voor Game3-----------------
 
@@ -564,19 +572,28 @@ while IsRunning:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     if PonePoint.rect.colliderect(PoneGreenBar.rect) and PoneStep <= 20:        # Check of de Pointer collide met de GreenBar
-                            PoneStep += 1
-                            PoneRedBarDrawed = False
-                            PoneGreenBarDrawed = False
+                        PoneStep += 1
+                        PoneRedBarDrawed = False
+                        PoneGreenBarDrawed = False
                     elif PonePoint.rect.colliderect(PoneRedBar.rect):     # Checkt of de player alleen met de RedBar collide wanneer het klikt
-                            if PoneStep - 2 < 0:
-                                PoneStep = 0
-                            else:
-                                PoneStep -= 2
-                            PoneRedBarDrawed = False
-                            PoneGreenBarDrawed = False
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w:
-                    PonePressed = False
+                        if PoneStep - 2 < 0:
+                            PoneStep = 0
+                        else:
+                            PoneStep -= 2
+                        PoneRedBarDrawed = False
+                        PoneGreenBarDrawed = False
+                if event.key == pygame.K_UP:
+                    if PtwoPoint.rect.colliderect(PtwoGreenBar.rect) and PtwoStep <= 20:
+                        PtwoStep += 1
+                        PtwoRedBarDrawed = False
+                        PtwoGreenBarDrawed = False
+                    elif PtwoPoint.rect.colliderect(PtwoRedBar.rect):
+                        if PtwoStep - 2 < 0:
+                            PtwoStep = 0
+                        else:
+                            PtwoStep -= 2
+                        PtwoRedBarDrawed = False
+                        PtwoGreenBarDrawed = False
 
         if Game5:
             if Sgamestart:
@@ -627,15 +644,16 @@ while IsRunning:
         LoadingTime = LoadingInt
         LoadingEnd = loading(LoadingEnd)
 
-    if Key[pygame.K_SPACE]:
+    if Key[pygame.K_SPACE]:     # Hiermeer worden alle games gestart
         if not Menu:
             if not GameStarted:
                 GameStarted = True
                 CountDown = True
                 PoneReady, PtwoReady = True, True
                 PoneLose, PtwoLose = False, False
-                if Game1:
-                    ScoreDebounce = False
+                PoneStep, PtwoStep = 0, 0
+                PoneWin, PtwoWin = False, False
+                ScoreDebounce = False
 
     if Menu:
         win.fill(MainPurple)
@@ -936,15 +954,23 @@ while IsRunning:
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
 
     if Game2:
-        win.fill(MainPurple)
+        win.fill(Blue)
+        pygame.draw.rect(win, (44, 200, 44), (0, 150, ScreenWidth, ScreenHeight))       # Gras
+        pygame.draw.rect(win, (115, 44, 0), (0, 160, ScreenWidth, ScreenHeight))        # Eerste aardlaag
+        pygame.draw.rect(win, (160, 88, 44), (0, 250, ScreenWidth, ScreenHeight))       # Tweede aardlaag
+        pygame.draw.rect(win, (200, 120, 80), (0, 350, ScreenWidth, ScreenHeight))      # Derde aardlaag
+        pygame.draw.rect(win, (255, 180, 105), (0, 450, ScreenWidth, ScreenHeight))     # Zand
+        pygame.draw.rect(win, (163, 159, 155), (0, 600, ScreenWidth, ScreenHeight))     # Steen
+
+
         pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Gunter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt,
-                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt,
-                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
-        pygame.draw.rect(win, Black, (300, 500 - PoneStep * 20, 50, 50))
-        pygame.draw.rect(win, Black, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een Zwarte lijn
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+
+        pygame.draw.rect(win, Red, (275, 500 - PoneStep * 20, 50, 50))      # Dit is Hamudt
+        pygame.draw.rect(win, Blue, (875, 500 - PtwoStep * 20, 50, 50))     # Dit is Eduardo
+
             # Volgorde:
             # background
             # lijn voor onderscheid
@@ -956,11 +982,9 @@ while IsRunning:
             # Pointer
         
         Barz = (255, 140, 140)
-        pygame.draw.rect(win, Barz, (
-        ScreenWidth * (1 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Hamudt
-        pygame.draw.rect(win, Barz, (
-        ScreenWidth * (5 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Eduardo
-    # """
+        pygame.draw.rect(win, Barz, (ScreenWidth * (1 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Hamudt
+        pygame.draw.rect(win, Barz, (ScreenWidth * (5 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Eduardo
+
 
         if CountDown:
             if CountDownAmount == 1:
@@ -979,11 +1003,15 @@ while IsRunning:
             pygame.time.delay(500)
         else:
 
-            if GameStarted:
-                if PonePoint.rect.x > ScreenWidth * (3 / 8) - 10:  # Heen en weer gaan van de PonePointer
+            if GameStarted and not PoneWin and not PtwoWin:
+                if PonePoint.rect.x > ScreenWidth * (3 / 8) - 10:   # Heen en weer gaan van de PonePointer
                     PonePointerSpeed *= -1
                 elif PonePoint.rect.x < ScreenWidth * (1 / 8) + 5:
                     PonePointerSpeed *= -1
+                if PtwoPoint.rect.x > ScreenWidth * (7 / 8) - 10:   # Heen en weer gaan van de PtwoPointer
+                    PtwoPointerSpeed *= -1
+                elif PtwoPoint.rect.x < ScreenWidth * (5 / 8) + 5:
+                    PtwoPointerSpeed *= -1
 
                 """
                 20 stappen
@@ -994,27 +1022,54 @@ while IsRunning:
                 Ultiem Rood = -5
                 """
 
-                PonePoint.move(PonePointerSpeed)  # Beweeg de PonePointer
+                PonePoint.move(PonePointerSpeed)    # Beweeg de PonePointer
+                PtwoPoint.move(PtwoPointerSpeed)    # Beweeg de PtwoPointer
 
                 PoneRedRandSize = math.floor((ScreenWidth * (1 / 10))-(4*PoneStep))
                 PoneRedRandPos = random.randint(0, ScreenWidth * (2 / 8) - PoneRedRandSize)
+
+                PtwoRedRandSize = math.floor((ScreenWidth * (1/10)) - (4*PtwoStep))
+                PtwoRedRandPos = random.randint(0, ScreenWidth * (2 / 8) - PtwoRedRandSize) + ScreenWidth*(4/8)
+
+                if PoneStep >= 20:
+                    GameStarted = False
+                    PoneWin = True
+                elif PtwoStep >= 20:
+                    GameStarted = False
+                    PtwoWin = True
+
                 if not PoneRedBarDrawed:  # Een debounce om het maar een keer een random positie en size te geven
                     PoneRedBar.SetSize(PoneRedRandSize, PoneRedRandPos)
                     PoneRedBarDrawed = True
+                if not PtwoRedBarDrawed:
+                    PtwoRedBar.SetSize(PtwoRedRandSize, PtwoRedRandPos)
+                    PtwoRedBarDrawed = True
 
                 if not PoneGreenBarDrawed:
-                    PoneGreenBar.SetSize(15, PoneRedRandPos)
+                    PoneGreenBar.SetSize(PoneRedRandPos, 1)
                     PoneGreenBarDrawed = True
+                if not PtwoGreenBarDrawed:
+                    PtwoGreenBar.SetSize(PtwoRedRandPos, 2)
+                    PtwoGreenBarDrawed = True
 
-
-                elif not PonePoint.rect.colliderect(PoneRedBar.rect):
-                    PoneRedBarCollided = False
-                win.blit(PoneRedBar.image, PoneRedBar.rect)  # Draw de RedBar
-                win.blit(PoneGreenBar.image, PoneGreenBar.rect)  # Draw de GreenBar
+                win.blit(PoneRedBar.image, PoneRedBar.rect)  # Draw de RedBar voor Hamudt
+                win.blit(PoneGreenBar.image, PoneGreenBar.rect)  # Draw de GreenBar voor Hamudt
+                win.blit(PtwoRedBar.image, PtwoRedBar.rect)  # Draw de RedBar voor Hamudt
+                win.blit(PtwoGreenBar.image, PtwoGreenBar.rect)  # Draw de GreenBar voor Hamudt
 
                 win.blit(PonePoint.image, PonePoint.rect)  # Draw de Pointer voor Hamudt
                 win.blit(PtwoPoint.image, PtwoPoint.rect)  # Draw de Pointer voor Eduardo
 
+            elif PoneWin:
+                if not ScoreDebounce:
+                    ScorePone += 1
+                    ScoreDebounce = True
+                win.blit(PoneWinTxt, PoneWinTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
+            elif PtwoWin:
+                if not ScoreDebounce:
+                    ScorePtwo += 1
+                    ScoreDebounce = True
+                win.blit(PtwoWinTxt, PtwoWinTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
     if Game3:
         pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Pong")
         # variables bars
@@ -1153,9 +1208,9 @@ while IsRunning:
 
         # DA GAME
         win.fill((0, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+        PoneBGC, PtwoBGC = Black, PoneBGC  # Achtergrond voor de score names
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
         # controls
         keys = pygame.key.get_pressed()
@@ -1407,6 +1462,9 @@ while IsRunning:
                         piet.move(1000)
                     else:
                         C = 0
+        PoneBGC, PtwoBGC = White, PoneBGC  # Achtergrond voor de score names
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
     if Game5:
         win.fill((10, 10, 255))
@@ -1567,6 +1625,9 @@ while IsRunning:
         else:
             win.blit(SPlayer1image, (Splayer1x, Splayer1y))
 
+        PoneBGC, PtwoBGC = (0, 0, 255), PoneBGC  # Achtergrond voor de score names
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         pygame.display.update()
 
     if Game6:

@@ -109,6 +109,7 @@ PtwoSimonBlueColour, PtwoSimonGreenColour, PtwoSimonRedColour, PtwoSimonYellowCo
 PoneBlueColour, PoneGreenColour, PoneRedColour, PoneYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 PtwoBlueColour, PtwoGreenColour, PtwoRedColour, PtwoYellowColour = BluePlaceHolder, GreenPlaceHolder, RedPlaceHolder, YellowPlaceHolder
 
+
 # -----------------De volgende Variables zijn voor Game2-----------------
 class Pointer:
     def __init__(self, PointerX):
@@ -154,9 +155,11 @@ class GreenBar:
         self.rect = self.image.get_rect()
         self.rect.y = ScreenHeight * (7 / 8)
         if ID == 1:
-            self.rect.x = (PoneRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (self.image.get_width() / 2)
+            self.rect.x = (PoneRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (
+                        self.image.get_width() / 2)
         if ID == 2:
-            self.rect.x = (PtwoRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (self.image.get_width() / 2)
+            self.rect.x = (PtwoRedBar.image.get_width() / 2) + (ScreenWidth * (1 / 8)) + GreenBarPos - (
+                        self.image.get_width() / 2)
 
 
 PonePointerSpeed = 10
@@ -180,6 +183,7 @@ PoneRedBar = RedBar()
 PtwoRedBar = RedBar()
 PoneGreenBar = GreenBar()
 PtwoGreenBar = GreenBar()
+
 
 # -----------------De volgende Variables zijn voor Game3-----------------
 
@@ -254,41 +258,7 @@ barrierUp = pygame.Rect(0, -10, ScreenWidth, 10)
 barrierDown = pygame.Rect(0, ScreenHeight, ScreenWidth, 10)
 secs = 0
 powerdUp = False
-# -----------------De volgende Variables zijn voor Game4-----------------
-Universalspeed = 10
-flowdirection = -40
-F = 1
-flowdirection1 = 40
-F1 = -1
-flownum = 0
-flownum1 = 0
-flow = "left"
-flow1 = "right"
-bridge1x = 400
-bridgex = 800
-C = 255
-HenkLife = True
-PietLife = True
-deathbarrier = pygame.Rect(0, 0, 50, 700)
-deathbarrier1 = pygame.Rect(1155, 0, 100, 700)
-player1 = "Runner"
-cosnumber = 0
-cosN = 1
-Missilespeed = 0
-Missile = pygame.transform.scale(pygame.image.load("Sprites/missile.png"), (32, 64))
-Killer = pygame.transform.scale(pygame.image.load("Sprites/KillerFish.png"), (74, 114))
-Eduardoplane = pygame.transform.scale(pygame.image.load("Sprites/EduardoPlane.png"), (75, 75))
-Hamudplane = pygame.transform.scale(pygame.image.load("Sprites/HamudtPlane.png"), (75, 75))
-Chaserimage = Eduardoplane
-Hamudroller = pygame.transform.scale(pygame.image.load("Sprites/Hamudroller.png"), (75, 75))
-Eduardoroller = pygame.transform.scale(pygame.image.load("Sprites/eduardoroller.png"), (50, 75))
-Runnerimage = Hamudroller
-brug = pygame.transform.scale(pygame.image.load("Sprites/brug.png"), (150, 139))
-gameover = False
-Henkwins = False
-Pietwins = False
-
-
+# -----------------De volgende Variables zijn voor Game4-----------------\
 class bullet:
     def __init__(self, Xbullet, Ybullet, image):
         self.image = image
@@ -346,6 +316,137 @@ class Bridge:
     def move(self, Movex, Movey):
         self.rect.x += Movex
         self.rect.y += Movey
+
+
+
+
+def henkreset():
+    global Universalspeed
+    global flowdirection
+    global F
+    global flowdirection1
+    global F1
+    global flownum
+    global flownum1
+    global flow
+    global flow1
+    global bridge1x
+    global bridgex
+    global C
+    global HenkLife
+    global PietLife
+    global deathbarrier
+    global deathbarrier1
+    global player1
+    global cosnumber
+    global cosN
+    global Missilespeed
+    global Missile
+    global gameover
+    global Henkwins
+    global Pietwins
+    global singleflow
+    global Flowright
+    global bridge1
+    global bridge2
+    global Bulletis
+    global airbombis
+    global Bullet
+    global KillerFish
+    global SPED
+    global henk
+    global piet
+    Universalspeed = 10
+    flowdirection = -40
+    F = 1
+    flowdirection1 = 40
+    F1 = -1
+    flownum = 0
+    flownum1 = 0
+    flow = "left"
+    flow1 = "right"
+    bridge1x = 400
+    bridgex = 800
+    C = 255
+    HenkLife = True
+    PietLife = True
+    player1 = "Runner"
+    cosnumber = 0
+    cosN = 1
+    gameover = False
+    Henkwins = False
+    Pietwins = False
+    singleflow = 0
+    Flowright = False
+    deathbarrier = pygame.Rect(0, 0, 50, 700)
+    deathbarrier1 = pygame.Rect(1155, 0, 100, 700)
+    henk = Runner(600, 200, Runnerimage)
+    piet = Chaser(600, 600, Chaserimage)
+    river1 = River(0, 300)
+    river2 = River(0, -200)
+    bridge1 = Bridge(bridge1x, river1.rect.y)
+    bridge2 = Bridge(bridgex, river2.rect.y)
+    Bulletis = False
+    airbombis = False
+    Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
+    KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
+    SPED = -4
+    Missilespeed = 0
+    henk = Runner(600, 200, Runnerimage)
+    piet = Chaser(600, 600, Chaserimage)
+    river1 = River(0, 300)
+    river2 = River(0, -200)
+    river1.rect.y = 300
+    river2.rect.y = -200
+    bridge1 = Bridge(bridge1x, river1.rect.y)
+    bridge2 = Bridge(bridgex, river2.rect.y)
+    randomplayer()
+Missile = pygame.transform.scale(pygame.image.load("Sprites/missile.png"), (32, 64))
+Killer = pygame.transform.scale(pygame.image.load("Sprites/KillerFish.png"), (74, 114))
+Eduardoplane = pygame.transform.scale(pygame.image.load("Sprites/EduardoPlane.png"), (75, 75))
+Hamudplane = pygame.transform.scale(pygame.image.load("Sprites/HamudtPlane.png"), (75, 75))
+Chaserimage = Eduardoplane
+Hamudroller = pygame.transform.scale(pygame.image.load("Sprites/Hamudroller.png"), (75, 75))
+Eduardoroller = pygame.transform.scale(pygame.image.load("Sprites/eduardoroller.png"), (50, 75))
+Runnerimage = Hamudroller
+brug = pygame.transform.scale(pygame.image.load("Sprites/brug.png"), (150, 139))
+Universalspeed = 10
+flowdirection = -40
+F = 1
+flowdirection1 = 40
+F1 = -1
+flownum = 0
+flownum1 = 0
+flow = "left"
+flow1 = "right"
+bridge1x = 400
+bridgex = 800
+C = 255
+HenkLife = True
+PietLife = True
+player1 = "Runner"
+cosnumber = 0
+cosN = 1
+gameover = False
+Henkwins = False
+Pietwins = False
+singleflow = 0
+Flowright = False
+deathbarrier = pygame.Rect(0, 0, 50, 700)
+deathbarrier1 = pygame.Rect(1155, 0, 100, 700)
+Bulletis = False
+airbombis = False
+SPED = -4
+Missilespeed = 0
+henk = Runner(600, 200, Runnerimage)
+piet = Chaser(600, 600, Chaserimage)
+river1 = River(0, 300)
+river2 = River(0, -200)
+bridge1 = Bridge(bridge1x, river1.rect.y)
+bridge2 = Bridge(bridgex, river2.rect.y)
+Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
+KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
+
 
 
 def randomplayer():
@@ -444,30 +545,20 @@ def shoot2():
 
 
 randomplayer()
-singleflow = 0
-Flowright = False
 henk = Runner(600, 200, Runnerimage)
 piet = Chaser(600, 600, Chaserimage)
 river1 = River(0, 300)
 river2 = River(0, -200)
 bridge1 = Bridge(bridge1x, river1.rect.y)
 bridge2 = Bridge(bridgex, river2.rect.y)
-Bulletis = False
-airbombis = False
-Bullet = bullet(piet.rect.x + 20, piet.rect.y + 25, Missile)
-KillerFish = bullet(henk.rect.x + 33, henk.rect.y, Killer)
-SPED = -4
 # -----------------De volgende Variables zijn voor Game5-----------------
 
 Sgamestart = False
 Sgamestarttimer = 0
 Startsumotimer = False
-Sload1 = pygame.image.load("Sprites/1.png")
-Sload1 = pygame.transform.scale(Sload1, (100, 100))
-Sload2 = pygame.image.load("Sprites/2.png")
-Sload2 = pygame.transform.scale(Sload2, (100, 100))
-Sload3 = pygame.image.load("Sprites/3.png")
-Sload3 = pygame.transform.scale(Sload3, (100, 100))
+Sload1 = pygame.transform.scale(pygame.image.load("Sprites/1.png"), (100, 100))
+Sload2 = pygame.transform.scale(pygame.image.load("Sprites/2.png"), (100, 100))
+Sload3 = pygame.transform.scale(pygame.image.load("Sprites/3.png"), (100, 100))
 Sfont = pygame.font.Font("freesansbold.ttf", 50)
 Stext = Sfont.render("Press the Spacebar to start!", True, (225, 225, 225), (0, 0, 0))
 Stextrect = Stext.get_rect()
@@ -515,7 +606,27 @@ Sumogamedone = False
 SS = 0
 gavescoreScoreplayer2 = False
 gavescoreScoreplayer1 = False
-
+def Sumoreset():
+    global Splayer2x
+    global Splayer1x
+    global Splayer1rect
+    global Splayer2rect
+    global Splayer1live
+    global Splayer2live
+    global SS
+    global Sgamestart
+    global gavescoreScoreplayer2
+    global gavescoreScoreplayer1
+    Splayer2x = 900
+    Splayer1x = 200
+    Splayer1rect = pygame.Rect(200, 275, 100, 100)
+    Splayer2rect = pygame.Rect(900, 275, 100, 100)
+    Splayer1live = True
+    Splayer2live = True
+    SS = 0
+    Sgamestart = False
+    gavescoreScoreplayer2 = False
+    gavescoreScoreplayer1 = False
 # --------------------------------------------------------------------Main while loop-----------------------------------------------------------------------------------
 
 while IsRunning:
@@ -562,20 +673,26 @@ while IsRunning:
                         PtwoList.append(ColourList[3])
                         CheckTwo = True
                 else:
-                    pygame.draw.rect(win, PtwoBlueColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
-                    pygame.draw.rect(win, PtwoRedColour, (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
-                    pygame.draw.rect(win, PtwoGreenColour, (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
-                    pygame.draw.rect(win, PtwoYellowColour, (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                    pygame.draw.rect(win, PtwoBlueColour,
+                                     (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+                    pygame.draw.rect(win, PtwoRedColour,
+                                     (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+                    pygame.draw.rect(win, PtwoGreenColour,
+                                     (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                    pygame.draw.rect(win, PtwoYellowColour,
+                                     (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     PtwoReady = True
 
         if Game2:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    if PonePoint.rect.colliderect(PoneGreenBar.rect) and PoneStep <= 20:        # Check of de Pointer collide met de GreenBar
+                    if PonePoint.rect.colliderect(
+                            PoneGreenBar.rect) and PoneStep <= 20:  # Check of de Pointer collide met de GreenBar
                         PoneStep += 1
                         PoneRedBarDrawed = False
                         PoneGreenBarDrawed = False
-                    elif PonePoint.rect.colliderect(PoneRedBar.rect):     # Checkt of de player alleen met de RedBar collide wanneer het klikt
+                    elif PonePoint.rect.colliderect(
+                            PoneRedBar.rect):  # Checkt of de player alleen met de RedBar collide wanneer het klikt
                         if PoneStep - 2 < 0:
                             PoneStep = 0
                         else:
@@ -612,6 +729,7 @@ while IsRunning:
                             Splayer1x -= 20
                             Splayer1rect.move_ip(-20, 0)
 
+
     # """
     def loading(val):
         for y in range(1, LoadingTime):
@@ -627,7 +745,7 @@ while IsRunning:
 
     ScorePoneTxt = SmallFont.render("Hamudt: " + str(ScorePone), True, Red, PoneBGC)  # Update de score van Hamudt
     ScorePtwoTxt = SmallFont.render("Eduardo: " + str(ScorePtwo), True, Blue, PtwoBGC)  # Update de score van Eduardo
-
+# this is to stop playing the games
     Key = pygame.key.get_pressed()
     if Key[pygame.K_ESCAPE]:
         Menu = True
@@ -643,8 +761,12 @@ while IsRunning:
         PoneLose, PtwoLose = False, False
         LoadingTime = LoadingInt
         LoadingEnd = loading(LoadingEnd)
+        # Resets game 4
+        henkreset()
+        # Resets game 4
+        Sumoreset()
 
-    if Key[pygame.K_SPACE]:     # Hiermeer worden alle games gestart
+    if Key[pygame.K_SPACE]:  # Hiermeer worden alle games gestart
         if not Menu:
             if not GameStarted:
                 GameStarted = True
@@ -731,48 +853,74 @@ while IsRunning:
                     Game6 = True
                 LoadingTime = LoadingInt
                 LoadingEnd = loading(LoadingEnd)
-
+#  ---------------------------------------------------Game 1--------------------------------------
     if Game1:
         win.fill(Gray)  # Teken de achtergrond
-        pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Simone zegt")  # Zet de caption met het huidige spel
+        pygame.display.set_caption(
+            "Arda en Nieks Reetro(met een C) Arkade: Simone zegt")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, Gray  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        win.blit(ScorePoneTxt,
+                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt,
+                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
         pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 10), 0, 10, ScreenHeight))  # Draw een witte lijn
 
         # Simon voor Player One
         pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
-        pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
-        pygame.draw.rect(win, PoneSimonGreenColour, (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
-        pygame.draw.rect(win, PoneSimonYellowColour,(math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        pygame.draw.rect(win, PoneSimonRedColour,
+                         (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
+        pygame.draw.rect(win, PoneSimonGreenColour,
+                         (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        pygame.draw.rect(win, PoneSimonYellowColour,
+                         (math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
         # Player One
-        pygame.draw.rect(win, PoneBlueColour,(math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
-        pygame.draw.rect(win, PoneRedColour,(math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
-        pygame.draw.rect(win, PoneGreenColour,(math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
-        pygame.draw.rect(win, PoneYellowColour,(math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+        pygame.draw.rect(win, PoneBlueColour,
+                         (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+        pygame.draw.rect(win, PoneRedColour,
+                         (math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+        pygame.draw.rect(win, PoneGreenColour,
+                         (math.floor(ScreenWidth / 5 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+        pygame.draw.rect(win, PoneYellowColour,
+                         (math.floor(ScreenWidth / 5 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
 
         # Simon voor Player Two
-        pygame.draw.rect(win, PtwoSimonBlueColour,(math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
-        pygame.draw.rect(win, PtwoSimonRedColour,(math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
-        pygame.draw.rect(win, PtwoSimonGreenColour,(math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
-        pygame.draw.rect(win, PtwoSimonYellowColour,(math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        pygame.draw.rect(win, PtwoSimonBlueColour,
+                         (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
+        pygame.draw.rect(win, PtwoSimonRedColour,
+                         (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
+        pygame.draw.rect(win, PtwoSimonGreenColour,
+                         (math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+        pygame.draw.rect(win, PtwoSimonYellowColour,
+                         (math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
         # Player Two
-        pygame.draw.rect(win, PtwoBlueColour,(math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
-        pygame.draw.rect(win, PtwoRedColour,(math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
-        pygame.draw.rect(win, PtwoGreenColour,(math.floor(ScreenWidth / 1.35 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
-        pygame.draw.rect(win, PtwoYellowColour,(math.floor(ScreenWidth / 1.35 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+        pygame.draw.rect(win, PtwoBlueColour,
+                         (math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5), 50, 25))
+        pygame.draw.rect(win, PtwoRedColour,
+                         (math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5 + 50), 50, 25))
+        pygame.draw.rect(win, PtwoGreenColour,
+                         (math.floor(ScreenWidth / 1.35 - 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+        pygame.draw.rect(win, PtwoYellowColour,
+                         (math.floor(ScreenWidth / 1.35 + 75), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
 
 
         def PoneSimonColourUpdate():
-            pygame.draw.rect(win, PoneSimonBlueColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
-            pygame.draw.rect(win, PoneSimonRedColour, (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
-            pygame.draw.rect(win, PoneSimonGreenColour, (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
-            pygame.draw.rect(win, PoneSimonYellowColour, (math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
-            pygame.draw.rect(win, PtwoSimonBlueColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
-            pygame.draw.rect(win, PtwoSimonRedColour, (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
-            pygame.draw.rect(win, PtwoSimonGreenColour, (math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
-            pygame.draw.rect(win, PtwoSimonYellowColour, (math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.draw.rect(win, PoneSimonBlueColour,
+                             (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6), 100, 50))
+            pygame.draw.rect(win, PoneSimonRedColour,
+                             (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 100), 100, 50))
+            pygame.draw.rect(win, PoneSimonGreenColour,
+                             (math.floor(ScreenWidth / 5 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.draw.rect(win, PoneSimonYellowColour,
+                             (math.floor(ScreenWidth / 5 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.draw.rect(win, PtwoSimonBlueColour,
+                             (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6), 100, 50))
+            pygame.draw.rect(win, PtwoSimonRedColour,
+                             (math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 100), 100, 50))
+            pygame.draw.rect(win, PtwoSimonGreenColour,
+                             (math.floor(ScreenWidth / 1.35 - 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
+            pygame.draw.rect(win, PtwoSimonYellowColour,
+                             (math.floor(ScreenWidth / 1.35 + 100), math.floor(ScreenHeight / 6 + 50), 100, 50))
             pygame.display.update()
 
 
@@ -848,7 +996,7 @@ while IsRunning:
                             pygame.draw.rect(win, White,
                                              (math.floor(ScreenWidth / 5), math.floor(ScreenHeight / 6 + 50), 100, 50))
                             pygame.draw.rect(win, White, (
-                            math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 50), 100, 50))
+                                math.floor(ScreenWidth / 1.35), math.floor(ScreenHeight / 6 + 50), 100, 50))
                             if x == "Blue":
                                 PoneSimonBlueColour = Blue
                             if x == "Green":
@@ -887,10 +1035,10 @@ while IsRunning:
                 else:
                     if not PoneReady:
                         pygame.draw.rect(win, White, (
-                        math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                            math.floor(ScreenWidth / 5 + 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     if not PtwoReady:
                         pygame.draw.rect(win, White, (
-                        math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
+                            math.floor(ScreenWidth / 1.35 + 25), math.floor(ScreenHeight / 1.5 + 25), 50, 25))
                     if Key[pygame.K_w]:
                         PoneBlueColour = Blue
                     else:
@@ -952,39 +1100,42 @@ while IsRunning:
             LoseTxtFunc("Eduardo")
             win.blit(LoseTxt, LoseTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
             win.blit(SpaceRestartTxt, SpaceRestartTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 1.2)))
-
+#  -------------------------------------Game 2 --------------------------------
     if Game2:
         win.fill(Blue)
-        pygame.draw.rect(win, (44, 200, 44), (0, 150, ScreenWidth, ScreenHeight))       # Gras
-        pygame.draw.rect(win, (115, 44, 0), (0, 160, ScreenWidth, ScreenHeight))        # Eerste aardlaag
-        pygame.draw.rect(win, (160, 88, 44), (0, 250, ScreenWidth, ScreenHeight))       # Tweede aardlaag
-        pygame.draw.rect(win, (200, 120, 80), (0, 350, ScreenWidth, ScreenHeight))      # Derde aardlaag
-        pygame.draw.rect(win, (255, 180, 105), (0, 450, ScreenWidth, ScreenHeight))     # Zand
-        pygame.draw.rect(win, (163, 159, 155), (0, 600, ScreenWidth, ScreenHeight))     # Steen
+        pygame.draw.rect(win, (44, 200, 44), (0, 150, ScreenWidth, ScreenHeight))  # Gras
+        pygame.draw.rect(win, (115, 44, 0), (0, 160, ScreenWidth, ScreenHeight))  # Eerste aardlaag
+        pygame.draw.rect(win, (160, 88, 44), (0, 250, ScreenWidth, ScreenHeight))  # Tweede aardlaag
+        pygame.draw.rect(win, (200, 120, 80), (0, 350, ScreenWidth, ScreenHeight))  # Derde aardlaag
+        pygame.draw.rect(win, (255, 180, 105), (0, 450, ScreenWidth, ScreenHeight))  # Zand
+        pygame.draw.rect(win, (163, 159, 155), (0, 600, ScreenWidth, ScreenHeight))  # Steen
 
-
-        pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Gunter")  # Zet de caption met het huidige spel
+        pygame.display.set_caption(
+            "Arda en Nieks Reetro(met een C) Arkade: Gunter")  # Zet de caption met het huidige spel
         PoneBGC, PtwoBGC = Gray, PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        win.blit(ScorePoneTxt,
+                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt,
+                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
 
-        pygame.draw.rect(win, Red, (275, 500 - PoneStep * 20, 50, 50))      # Dit is Hamudt
-        pygame.draw.rect(win, Blue, (875, 500 - PtwoStep * 20, 50, 50))     # Dit is Eduardo
+        pygame.draw.rect(win, Red, (275, 500 - PoneStep * 20, 50, 50))  # Dit is Hamudt
+        pygame.draw.rect(win, Blue, (875, 500 - PtwoStep * 20, 50, 50))  # Dit is Eduardo
 
-            # Volgorde:
-            # background
-            # lijn voor onderscheid
-            # Gray bar/area voor de players
-            # Rode Bar
-            # Ultiem Rood
-            # Groene Bar
-            # Gele Bar
-            # Pointer
-        
+        # Volgorde:
+        # background
+        # lijn voor onderscheid
+        # Gray bar/area voor de players
+        # Rode Bar
+        # Ultiem Rood
+        # Groene Bar
+        # Gele Bar
+        # Pointer
+
         Barz = (255, 140, 140)
-        pygame.draw.rect(win, Barz, (ScreenWidth * (1 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Hamudt
-        pygame.draw.rect(win, Barz, (ScreenWidth * (5 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Eduardo
-
+        pygame.draw.rect(win, Barz, (
+        ScreenWidth * (1 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Hamudt
+        pygame.draw.rect(win, Barz, (
+        ScreenWidth * (5 / 8), ScreenHeight * (7 / 8), ScreenWidth * (1 / 4), 20))  # Outline voor Eduardo
 
         if CountDown:
             if CountDownAmount == 1:
@@ -1004,11 +1155,11 @@ while IsRunning:
         else:
 
             if GameStarted and not PoneWin and not PtwoWin:
-                if PonePoint.rect.x > ScreenWidth * (3 / 8) - 10:   # Heen en weer gaan van de PonePointer
+                if PonePoint.rect.x > ScreenWidth * (3 / 8) - 10:  # Heen en weer gaan van de PonePointer
                     PonePointerSpeed *= -1
                 elif PonePoint.rect.x < ScreenWidth * (1 / 8) + 5:
                     PonePointerSpeed *= -1
-                if PtwoPoint.rect.x > ScreenWidth * (7 / 8) - 10:   # Heen en weer gaan van de PtwoPointer
+                if PtwoPoint.rect.x > ScreenWidth * (7 / 8) - 10:  # Heen en weer gaan van de PtwoPointer
                     PtwoPointerSpeed *= -1
                 elif PtwoPoint.rect.x < ScreenWidth * (5 / 8) + 5:
                     PtwoPointerSpeed *= -1
@@ -1022,14 +1173,14 @@ while IsRunning:
                 Ultiem Rood = -5
                 """
 
-                PonePoint.move(PonePointerSpeed)    # Beweeg de PonePointer
-                PtwoPoint.move(PtwoPointerSpeed)    # Beweeg de PtwoPointer
+                PonePoint.move(PonePointerSpeed)  # Beweeg de PonePointer
+                PtwoPoint.move(PtwoPointerSpeed)  # Beweeg de PtwoPointer
 
-                PoneRedRandSize = math.floor((ScreenWidth * (1 / 10))-(4*PoneStep))
+                PoneRedRandSize = math.floor((ScreenWidth * (1 / 10)) - (4 * PoneStep))
                 PoneRedRandPos = random.randint(0, ScreenWidth * (2 / 8) - PoneRedRandSize)
 
-                PtwoRedRandSize = math.floor((ScreenWidth * (1/10)) - (4*PtwoStep))
-                PtwoRedRandPos = random.randint(0, ScreenWidth * (2 / 8) - PtwoRedRandSize) + ScreenWidth*(4/8)
+                PtwoRedRandSize = math.floor((ScreenWidth * (1 / 10)) - (4 * PtwoStep))
+                PtwoRedRandPos = random.randint(0, ScreenWidth * (2 / 8) - PtwoRedRandSize) + ScreenWidth * (4 / 8)
 
                 if PoneStep >= 20:
                     GameStarted = False
@@ -1070,6 +1221,7 @@ while IsRunning:
                     ScorePtwo += 1
                     ScoreDebounce = True
                 win.blit(PtwoWinTxt, PtwoWinTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
+#  ----------------------------------------Game 3 -------------------------------------
     if Game3:
         pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Pong")
         # variables bars
@@ -1204,108 +1356,130 @@ while IsRunning:
             yspeedlist.append(yspeed)
             xspeedlist.append(xspeed)
             balllist.append(ball)
-
-
-        # DA GAME
-        win.fill((0, 0, 0))
-        PoneBGC, PtwoBGC = Black, PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
-
-        # controls
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] and not Player1.rect.y < 0:
-            Player1.move(movespeedP1)
-        if keys[pygame.K_s] and not Player1.rect.y > (ScreenHeight - 200):
-            Player1.move(-movespeedP1)
-        if keys[pygame.K_UP] and not Player2.rect.y < 0:
-            Player2.move(movespeedP2)
-        if keys[pygame.K_DOWN] and not Player2.rect.y > (ScreenHeight - 200):
-            Player2.move(-movespeedP2)
-
-        # ball
-        for u in range(len(balllist)):
-            if balllist[u].rect.colliderect(barrierUp) or balllist[u].rect.colliderect(barrierDown):
-                yspeedlist[u] *= -1
-            if balllist[u].rect.colliderect(Player1) and Leftballlist[u]:
-                xspeedlist[u] *= -1
-                Leftballlist[u] = False
-            if balllist[u].rect.colliderect(Player2) and not Leftballlist[u]:
-                xspeedlist[u] *= -1
-                Leftballlist[u] = True
-            if balllist[u].rect.x < 0:
-                ScorePtwo += 1
-                time.sleep(0.5)
-                restart()
-                break
-            if balllist[u].rect.x > ScreenWidth - balllist[u].rect.width:
-                ScorePone += 1
-                time.sleep(0.5)
-                restart()
-                break
-            if Hportals:
-                if balllist[u].rect.colliderect(portalA) and not Hteleported:
-                    balllist[u].teleport(teleportB[0], teleportB[1] + balllist[u].rect.height * isbottomB)
-                    Hportals = False
-                    Hteleported = True
-                    portalA.reset()
-                    portalB.reset()
-                if balllist[u].rect.colliderect(portalB) and not Hteleported:
-                    balllist[u].teleport(teleportA[0], teleportA[1] + balllist[u].rect.height * isbottomA)
-                    Hportals = False
-                    Hteleported = True
-                    portalB.reset()
-                    portalA.reset()
-            if Vportals:
-                if balllist[u].rect.colliderect(portalC) and not Vteleported:
-                    balllist[u].teleport(teleportD[0], teleportD[1])
-                    Vportals = False
-                    Vteleported = True
-                    portalC.reset()
-                    portalD.reset()
-                if balllist[u].rect.colliderect(portalD) and not Vteleported:
-                    balllist[u].teleport(teleportC[0], teleportC[1])
-                    Vportals = False
-                    Vteleported = True
-                    portalD.reset()
-                    portalC.reset()
-            if powerdUp:
-                if balllist[u].rect.colliderect(power):
-                    power.rect.x = - 200
-                    power.rect.y = - 200
-                    P = random.randint(1, 3)
-                    if P == 1:
-                        addball()
-                    elif P == 2:
-                        new_H_portals()
-                    else:
-                        new_V_portals()
-                    powerdUp = False
-            balllist[u].move(xspeedlist[u], yspeedlist[u])
-            win.blit(balllist[u].image, balllist[u].rect)
-        # Powerups
-        secs += 1
-        if secs == 33:
-            if not powerdUp:
-                G = random.randint(1, 4)
-                if G == 4:
-                    x = random.randint((ScreenWidth / 10 + 60), (ScreenWidth / 10) * 9 - 60)
-                    y = random.randint(10, ScreenHeight - 70)
-                    power = powerup(x, y)
-                    powerdUp = True
-            secs = 0
-        # draw
-        if powerdUp:
-            win.blit(power.image, power.rect)
-        if Vportals:
-            win.blit(portalC.image, portalC.rect)
-            win.blit(portalD.image, portalD.rect)
-        if Hportals:
-            win.blit(portalA.image, portalA.rect)
-            win.blit(portalB.image, portalB.rect)
         win.blit(Player2.image, Player2.rect)
         win.blit(Player1.image, Player1.rect)
-        pygame.display.update()
+        if not GameStarted:
+            win.blit(Stext, Stextrect)
+        if CountDown:
+            if CountDownAmount == 1:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img1, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+                CountDownAmount = 4
+                CountDown = False
+            if CountDownAmount == 2:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img2, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            if CountDownAmount == 3:
+                pygame.draw.rect(win, White, (math.floor(ScreenWidth / 2 - 50), math.floor(ScreenHeight / 3), 100, 100))
+                win.blit(Img3, (ScreenWidth / 2 - 50, ScreenHeight / 3))
+            CountDownAmount -= 1
+            pygame.display.update()
+            pygame.time.delay(500)
+
+        else:
+            if GameStarted:
+                # DA GAME
+                win.fill((0, 0, 0))
+                PoneBGC, PtwoBGC = Black, PoneBGC  # Achtergrond voor de score names
+                win.blit(ScorePoneTxt,
+                         ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+                win.blit(ScorePtwoTxt,
+                         ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+
+                # controls
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_w] and not Player1.rect.y < 0:
+                    Player1.move(movespeedP1)
+                if keys[pygame.K_s] and not Player1.rect.y > (ScreenHeight - 200):
+                    Player1.move(-movespeedP1)
+                if keys[pygame.K_UP] and not Player2.rect.y < 0:
+                    Player2.move(movespeedP2)
+                if keys[pygame.K_DOWN] and not Player2.rect.y > (ScreenHeight - 200):
+                    Player2.move(-movespeedP2)
+
+                # ball
+                for u in range(len(balllist)):
+                    if balllist[u].rect.colliderect(barrierUp) or balllist[u].rect.colliderect(barrierDown):
+                        yspeedlist[u] *= -1
+                    if balllist[u].rect.colliderect(Player1) and Leftballlist[u]:
+                        xspeedlist[u] *= -1
+                        Leftballlist[u] = False
+                    if balllist[u].rect.colliderect(Player2) and not Leftballlist[u]:
+                        xspeedlist[u] *= -1
+                        Leftballlist[u] = True
+                    if balllist[u].rect.x < 0:
+                        ScorePtwo += 1
+                        time.sleep(0.5)
+                        restart()
+                        break
+                    if balllist[u].rect.x > ScreenWidth - balllist[u].rect.width:
+                        ScorePone += 1
+                        time.sleep(0.5)
+                        restart()
+                        break
+                    if Hportals:
+                        if balllist[u].rect.colliderect(portalA) and not Hteleported:
+                            balllist[u].teleport(teleportB[0], teleportB[1] + balllist[u].rect.height * isbottomB)
+                            Hportals = False
+                            Hteleported = True
+                            portalA.reset()
+                            portalB.reset()
+                        if balllist[u].rect.colliderect(portalB) and not Hteleported:
+                            balllist[u].teleport(teleportA[0], teleportA[1] + balllist[u].rect.height * isbottomA)
+                            Hportals = False
+                            Hteleported = True
+                            portalB.reset()
+                            portalA.reset()
+                    if Vportals:
+                        if balllist[u].rect.colliderect(portalC) and not Vteleported:
+                            balllist[u].teleport(teleportD[0], teleportD[1])
+                            Vportals = False
+                            Vteleported = True
+                            portalC.reset()
+                            portalD.reset()
+                        if balllist[u].rect.colliderect(portalD) and not Vteleported:
+                            balllist[u].teleport(teleportC[0], teleportC[1])
+                            Vportals = False
+                            Vteleported = True
+                            portalD.reset()
+                            portalC.reset()
+                    if powerdUp:
+                        if balllist[u].rect.colliderect(power):
+                            power.rect.x = - 200
+                            power.rect.y = - 200
+                            P = random.randint(1, 3)
+                            if P == 1:
+                                addball()
+                            elif P == 2:
+                                new_H_portals()
+                            else:
+                                new_V_portals()
+                            powerdUp = False
+                    balllist[u].move(xspeedlist[u], yspeedlist[u])
+                    win.blit(balllist[u].image, balllist[u].rect)
+                # Powerups
+                secs += 1
+                if secs == 33:
+                    if not powerdUp:
+                        G = random.randint(1, 4)
+                        if G == 4:
+                            x = random.randint((ScreenWidth / 10 + 60), (ScreenWidth / 10) * 9 - 60)
+                            y = random.randint(10, ScreenHeight - 70)
+                            power = powerup(x, y)
+                            powerdUp = True
+                    secs = 0
+                # draw
+                if powerdUp:
+                    win.blit(power.image, power.rect)
+                if Vportals:
+                    win.blit(portalC.image, portalC.rect)
+                    win.blit(portalD.image, portalD.rect)
+                if Hportals:
+                    win.blit(portalA.image, portalA.rect)
+                    win.blit(portalB.image, portalB.rect)
+                win.blit(Player2.image, Player2.rect)
+                win.blit(Player1.image, Player1.rect)
+            pygame.display.update()
 
     #     --------------------------------------- GAME 4 ----------------------------------------
 
@@ -1325,6 +1499,13 @@ while IsRunning:
             win.blit(KillerFish.image, KillerFish.rect)
         win.blit(piet.image, piet.rect)
         win.blit(henk.image, henk.rect)
+        PoneBGC, PtwoBGC = White, PoneBGC  # Achtergrond voor de score names
+        win.blit(ScorePoneTxt,
+                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt,
+                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        if not GameStarted:
+            win.blit(Stext, Stextrect)
         pygame.display.update()
         if CountDown:
             if CountDownAmount == 1:
@@ -1343,6 +1524,7 @@ while IsRunning:
             pygame.time.delay(500)
 
         else:
+
             if GameStarted:
                 # player 1 movement
                 press = pygame.key.get_pressed()
@@ -1461,11 +1643,12 @@ while IsRunning:
                     if Henkwins:
                         piet.move(1000)
                     else:
-                        C = 0
-        PoneBGC, PtwoBGC = White, PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+                        henk.move(10000, 10000)
+                    henkreset()
+                    GameStarted = False
 
+
+# ------------------------------------------------ Game 5 ------------------------------------
     if Game5:
         win.fill((10, 10, 255))
         pygame.display.set_caption("Arda en Nieks Reetro(met een C) Arkade: Sumo")
@@ -1612,26 +1795,20 @@ while IsRunning:
                 ScorePtwo += 1
                 gavescoreScoreplayer2 = True
         if SS == 33:
-            Splayer2x = 900
-            Splayer1x = 200
-            Splayer1rect = pygame.Rect(200, 275, 100, 100)
-            Splayer2rect = pygame.Rect(900, 275, 100, 100)
-            Splayer1live = True
-            Splayer2live = True
-            SS = 0
-            Sgamestart = False
-            gavescoreScoreplayer2 = False
-            gavescoreScoreplayer1 = False
+            Sumoreset()
         else:
             win.blit(SPlayer1image, (Splayer1x, Splayer1y))
 
         PoneBGC, PtwoBGC = (0, 0, 255), PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        win.blit(ScorePoneTxt,
+                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt,
+                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         pygame.display.update()
 
     if Game6:
         win.fill(Yellow)
+        pygame.quit()
 
     if LoadingEnd:
         if not LoadingTime == 0:
@@ -1643,4 +1820,3 @@ while IsRunning:
 
     pygame.display.update()
 pygame.quit()
-

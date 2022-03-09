@@ -35,15 +35,19 @@ Game1 = False  # Simone Zegt
 Game2 = False  # Gunter
 Game3 = False  # Pong
 Game4 = False  # Henk en Piet 2.0 (Turkish Version)
-Game5 = False  #
-Game6 = False
+Game5 = False  # Sumo
+
 
 # De volgende Variables zijn veelgebruikte Values
 Img1 = pygame.transform.scale(pygame.image.load("Sprites/1.png"), (100, 100))
 Img2 = pygame.transform.scale(pygame.image.load("Sprites/2.png"), (100, 100))
 Img3 = pygame.transform.scale(pygame.image.load("Sprites/3.png"), (100, 100))
 Game1Img = pygame.transform.scale(pygame.image.load("Sprites/InkedGame1_LI.jpg"), (150, 100))
-RandPNG = pygame.transform.scale(pygame.image.load("Sprites/RandomSprite.png"), (114, 100))
+Game2Img = pygame.transform.scale(pygame.image.load("Sprites/GUNTER.png"), (150, 100))
+Game3Img = pygame.transform.scale(pygame.image.load("Sprites/ponk.png"),(150, 100))
+Game4Img = pygame.transform.scale(pygame.image.load("Sprites/henkenpiet.png"), (150, 100))
+Game5Img = pygame.transform.scale(pygame.image.load("Sprites/SumoLogo.png"), (150, 100))
+RandPNG = pygame.transform.scale(pygame.image.load("Sprites/RandomSprite.png"), (150, 100))
 hitSound = pygame.mixer.Sound("Sounds/hitmarker_2.mp3")
 hitSound.set_volume(0.1)
 IsRunning = True  # Een boolean voor de while loop
@@ -66,8 +70,7 @@ Game2Rect = pygame.Rect(525, 150, 150, 100)
 Game3Rect = pygame.Rect(825, 150, 150, 100)
 Game4Rect = pygame.Rect(225, 350, 150, 100)
 Game5Rect = pygame.Rect(525, 350, 150, 100)
-Game6Rect = pygame.Rect(825, 350, 150, 100)
-RandomGameRect = pygame.Rect(525, 550, 150, 100)
+RandomGameRect = pygame.Rect(825, 350, 150, 100)
 PoneBGC = Black
 PtwoBGC = Black
 
@@ -356,6 +359,8 @@ def henkreset():
     global SPED
     global henk
     global piet
+    global river1
+    global river2
     Universalspeed = 10
     flowdirection = -40
     F = 1
@@ -793,14 +798,13 @@ while IsRunning:
                  ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         win.blit(TitleTxt, TitleTxt.get_rect(center=(ScreenWidth / 2, ScreenHeight / 16)))
 
-        Game1Icon = pygame.draw.rect(win, Black, (225, 150, 150, 100))
         win.blit(Game1Img, (225, 150))
-        Game2Icon = pygame.draw.rect(win, Black, (525, 150, 150, 100))
-        Game3Icon = pygame.draw.rect(win, Black, (825, 150, 150, 100))
-        Game4Icon = pygame.draw.rect(win, Black, (225, 350, 150, 100))
-        Game5Icon = pygame.draw.rect(win, Black, (525, 350, 150, 100))
-        Game6Icon = pygame.draw.rect(win, Black, (825, 350, 150, 100))
-        win.blit(RandPNG, (543, 550))
+        win.blit(Game2Img, (525, 150))
+        win.blit(Game3Img, (825, 150))
+        win.blit(Game4Img, (225, 350))
+        win.blit(Game5Img, (525, 350))
+        win.blit(RandPNG, (825, 350))
+        win.blit(RandPNG, (825, 350))
 
         if pygame.mouse.get_pressed()[0]:
             MouseX = pygame.mouse.get_pos()[0]
@@ -829,11 +833,6 @@ while IsRunning:
             if MouseRect.colliderect(Game5Rect):
                 Menu = False
                 Game5 = True
-                LoadingTime = LoadingInt
-                LoadingEnd = loading(LoadingEnd)
-            if MouseRect.colliderect(Game6Rect):
-                Menu = False
-                Game6 = True
                 LoadingTime = LoadingInt
                 LoadingEnd = loading(LoadingEnd)
             if MouseRect.colliderect(RandomGameRect):
@@ -1805,10 +1804,6 @@ while IsRunning:
         win.blit(ScorePtwoTxt,
                  ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         pygame.display.update()
-
-    if Game6:
-        win.fill(Yellow)
-        pygame.quit()
 
     if LoadingEnd:
         if not LoadingTime == 0:

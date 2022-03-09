@@ -1,5 +1,5 @@
 # InformaticaPyGame
-A game PyGame school project created by @ardaboyroo and @Ky3a
+A PyGame school project created by @ardaboyroo and @Ky3a
 
 ---
 

@@ -1625,8 +1625,7 @@ while IsRunning:
                     flowrandom()
                     setbridgex()
                 # henk gets hit
-                if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(
-                        deathbarrier1) or henk.rect.y >= 650 or henk.rect.colliderect(Bullet):
+                if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(deathbarrier1) or henk.rect.y >= 650 or henk.rect.colliderect(Bullet):
                     HenkLife = False
                     Pietwins = True
                 # piet gets hit
@@ -1799,10 +1798,8 @@ while IsRunning:
             win.blit(SPlayer1image, (Splayer1x, Splayer1y))
 
         PoneBGC, PtwoBGC = (0, 0, 255), PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt,
-                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt,
-                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         pygame.display.update()
 
     if LoadingEnd:

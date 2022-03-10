@@ -5,7 +5,7 @@ A PyGame school project created by @ardaboyroo and @Ky3a
 
 ## How to Install and Run
 Download the project as a .zip file and extract its contents to your 
-*C:/[user]/PyCharmProjects* folder. Make sure to have PyGame installed before you proceed further. When the installation is done Run the main.py file through PyCharm.
+||*C:/[user]/PyCharmProjects*|| folder. Make sure to have PyGame installed before you proceed further. When the installation is done Run the main.py file through PyCharm.
 
 
 ## Controls

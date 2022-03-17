@@ -324,43 +324,10 @@ class Bridge:
 
 
 def henkreset():
-    global Universalspeed
-    global flowdirection
-    global F
-    global flowdirection1
-    global F1
-    global flownum
-    global flownum1
-    global flow
-    global flow1
-    global bridge1x
-    global bridgex
-    global C
-    global HenkLife
-    global PietLife
-    global deathbarrier
-    global deathbarrier1
-    global player1
-    global cosnumber
-    global cosN
-    global Missilespeed
-    global Missile
-    global gameover
-    global Henkwins
-    global Pietwins
-    global singleflow
-    global Flowright
-    global bridge1
-    global bridge2
-    global Bulletis
-    global airbombis
-    global Bullet
-    global KillerFish
-    global SPED
-    global henk
-    global piet
-    global river1
-    global river2
+    global Universalspeed, flowdirection, F, flowdirection1, F1, flownum, flownum1, flow, flow1, bridge1x, bridgex
+    global C, HenkLife, PietLife, deathbarrier, deathbarrier1, player1, cosnumber, cosN, Missilespeed, Missile, gameover
+    global Henkwins, Pietwins, singleflow, Flowright, bridge1, bridge2, Bulletis, airbombis, Bullet, KillerFish, SPED
+    global henk, piet, river1, river2
     Universalspeed = 10
     flowdirection = -40
     F = 1
@@ -1625,7 +1592,8 @@ while IsRunning:
                     flowrandom()
                     setbridgex()
                 # henk gets hit
-                if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(deathbarrier1) or henk.rect.y >= 650 or henk.rect.colliderect(Bullet):
+                if henk.rect.colliderect(deathbarrier) or henk.rect.colliderect(
+                        deathbarrier1) or henk.rect.y >= 650 or henk.rect.colliderect(Bullet):
                     HenkLife = False
                     Pietwins = True
                 # piet gets hit
@@ -1798,8 +1766,10 @@ while IsRunning:
             win.blit(SPlayer1image, (Splayer1x, Splayer1y))
 
         PoneBGC, PtwoBGC = (0, 0, 255), PoneBGC  # Achtergrond voor de score names
-        win.blit(ScorePoneTxt, ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
-        win.blit(ScorePtwoTxt, ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
+        win.blit(ScorePoneTxt,
+                 ScorePoneTxt.get_rect(center=(ScreenWidth / 16, ScreenHeight / 16)))  # Draw de score van Hamudt
+        win.blit(ScorePtwoTxt,
+                 ScorePtwoTxt.get_rect(center=(ScreenWidth / 1.1, ScreenHeight / 16)))  # Draw de score van Eduardo
         pygame.display.update()
 
     if LoadingEnd:

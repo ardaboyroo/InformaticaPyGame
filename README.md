@@ -19,9 +19,9 @@ The controls are as follows:
 
 * **"y"** - To reset the scores while being on the main menu
 
-* **"WASD"** - These keys are the controls for Player-one
+* **"WASD"** - These keys are the controls for Player-one(aka Hamudt)
 
-* **"←↑→↓"** - These keys are the controls for Player-two
+* **"←↑→↓"** - These keys are the controls for Player-two(aka Eduardo)
 
 * **"SpaceBar"** - To start the game or for Player-one to shoot
 
